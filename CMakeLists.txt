@@ -20,4 +20,6 @@ include_directories(include)
 
 add_executable(${TARGET_NAME} ${SOURCES} ${INCLUDE})
 
+add_subdirectory(tests)
+
 

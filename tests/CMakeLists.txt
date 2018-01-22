@@ -6,10 +6,10 @@ include_directories(../include)
 add_subdirectory(GoogletestLibrary)
 include_directories(GoogletestLibrary/googlemock/include)
 
-set(TESTS_SOURCES MainGTest.cpp)
+set(TESTS_SOURCES TestSources/HttpHandlerTest.cpp)
 set(INCLUDE ../include/Thread/HttpHandler.hpp)
 set(SRC ../sources/Thread/HttpHandler.cpp)
 
-add_executable(zia_unit_test ${SRC} ${INCLUDE} ${TESTS_SOURCES})
+add_executable(ZiaTests ${SRC} ${INCLUDE} ${TESTS_SOURCES})
 
-target_link_libraries(clienttest gtest)
+target_link_libraries(ZiaTests gtest_main)
