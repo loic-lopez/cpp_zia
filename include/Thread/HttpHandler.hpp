@@ -11,7 +11,8 @@
 class HttpHandler : public std::thread
 {
 public:
-    explicit HttpHandler(std::function<void()> function);
+    explicit HttpHandler();
+    void     run();
     ~HttpHandler();
 };
 

@@ -5,7 +5,7 @@
 #include <Thread/HttpHandler.hpp>
 #include <iostream>
 
-HttpHandler::HttpHandler(std::function<void()> function) : thread(function)
+HttpHandler::HttpHandler() : thread(&HttpHandler::run, this)
 {
 
 }
@@ -13,4 +13,9 @@ HttpHandler::HttpHandler(std::function<void()> function) : thread(function)
 HttpHandler::~HttpHandler()
 {
     this->join();
+}
+
+void HttpHandler::run()
+{
+    std::cerr << "COUCOU" << std::endl;
 }

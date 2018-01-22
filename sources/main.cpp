@@ -4,9 +4,7 @@
 int main()
 {
 
-    HttpHandler httpHandler([] () {
-        std::cerr << "THREAD" << std::endl;
-    });
+    HttpHandler httpHandler;
 
     return 0;
 }
