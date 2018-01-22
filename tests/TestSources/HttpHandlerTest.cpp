@@ -7,7 +7,7 @@
 
 TEST(HttpHandlerTest, ShouldSucceed)
 {
-    HttpHandler httpHandler;
+    //HttpHandler httpHandler;
 
 
     ASSERT_EQ(1, 1);
