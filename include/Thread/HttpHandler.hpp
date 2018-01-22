@@ -8,7 +8,10 @@
 
 class HttpHandler
 {
+public:
+    HttpHandler();
 
+    virtual ~HttpHandler();
 };
 
 

@@ -4,3 +4,12 @@
 
 #include <Thread/HttpHandler.hpp>
 
+HttpHandler::HttpHandler()
+{
+
+}
+
+HttpHandler::~HttpHandler()
+{
+
+}
