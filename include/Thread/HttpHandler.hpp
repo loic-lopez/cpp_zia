@@ -2,14 +2,14 @@
 // Created by loic lopez on 22/01/2018.
 //
 
-#ifndef CPP_ZIA_HANDLER_HXX
-#define CPP_ZIA_HANDLER_HXX
+#ifndef CPP_ZIA_HTTPHANDLER_HPP
+#define CPP_ZIA_HTTPHANDLER_HPP
 
 
-class Handler
+class HttpHandler
 {
 
 };
 
 
-#endif //CPP_ZIA_HANDLER_HXX
+#endif //CPP_ZIA_HTTPHANDLER_HPP

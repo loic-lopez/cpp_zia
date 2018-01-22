@@ -13,11 +13,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(SOURCES sources/main.cpp
         sources/Thread/HttpHandler.cpp)
 
-include_directories(include)
 
 set(INCLUDE include/Thread/HttpHandler.hpp)
 
+include_directories(include)
 
-add_executable(${TARGET_NAME} ${SOURCES} ${INCLUDES})
+add_executable(${TARGET_NAME} ${SOURCES} ${INCLUDE})
 
 
