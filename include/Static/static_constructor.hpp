@@ -8,7 +8,14 @@
 template<void(*ctor)()>
 struct static_constructor
 {
-    struct constructor { constructor() { ctor(); } };
+    struct constructor
+    {
+        constructor()
+        {
+            ctor();
+        }
+    };
+
     static constructor c;
 };
 
