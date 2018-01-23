@@ -19,7 +19,7 @@ public:
     static std::string  ServerIP;
 
     static bool LoadConfigFromFile(const std::string &file);
-    static bool isConfigFileExistant(const std::string &file);
+    static bool isConfigFileExists(const std::string &file);
 
 };
 

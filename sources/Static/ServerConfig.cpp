@@ -26,7 +26,7 @@ bool ServerConfig::LoadConfigFromFile(const std::string &file)
     return false;
 }
 
-bool ServerConfig::isConfigFileExistant(const std::string &file)
+bool ServerConfig::isConfigFileExists(const std::string &file)
 {
     return fs::exists(fs::path(file.c_str()));
 }
