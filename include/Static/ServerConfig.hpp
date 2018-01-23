@@ -6,6 +6,7 @@
 #define CPP_ZIA_CONFIG_HPP
 
 #include <string>
+#include <api/conf.h>
 #include "static_constructor.hpp"
 
 class ServerConfig

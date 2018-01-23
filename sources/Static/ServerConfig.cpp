@@ -2,8 +2,10 @@
 // Created by loic lopez on 23/01/2018.
 //
 
-#include <fstream>
+#include <experimental/filesystem>
 #include <Static/ServerConfig.hpp>
+
+namespace fs = std::experimental::filesystem;
 
 std::string ServerConfig::ServerIP;
 unsigned int ServerConfig::ServerPort;
@@ -24,13 +26,6 @@ bool ServerConfig::LoadConfigFromFile(const std::string &file)
 
 bool ServerConfig::isConfigFileExistant(const std::string &file)
 {
-    std::ifstream f(file.c_str());  // New enough C++ library will accept just name
-    if (f.is_open())
-    {
-        f.close();
-        return true;
-    }
-    else
-        return false;
+    return fs::exists(fs::path(file.c_str()));
 }
 

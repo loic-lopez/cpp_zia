@@ -3,6 +3,7 @@ project(cpp_zia)
 set(TARGET_NAME zia)
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lstdc++fs")
 
 if (APPLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
@@ -23,7 +24,13 @@ set(INCLUDE
         include/api/conf.h
         include/api/http.h
         include/api/module.h
-        include/api/net.h)
+        include/api/net.h
+        include/Library/json.hpp
+
+
+
+        )
+
 
 include_directories(include)
 
