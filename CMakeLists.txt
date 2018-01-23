@@ -10,9 +10,6 @@ if (APPLE)
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -gdwarf-3")
 endif()
 
-set(SOURCES sources/main.cpp
-        sources/Thread/HttpHandler.cpp sources/Static/ServerConfig.cpp)
-
 set(SOURCES
         sources/main.cpp
         sources/Thread/HttpHandler.cpp
