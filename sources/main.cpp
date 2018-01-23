@@ -1,15 +1,7 @@
-#include <Thread/HttpHandler.hpp>
-#include <Static/ServerConfig.hpp>
-#include <iostream>
+#include <Core/ServerCore.hpp>
 
 int main()
 {
-
-    //HttpHandler httpHandler;
-    if (ServerConfig::isConfigFileExists("toto"))
-        std::cout << "found" << std::endl;
-    else
-        std::cout << "not found" << std::endl;
-
+    ServerCore::Instance().run();
     return 0;
 }

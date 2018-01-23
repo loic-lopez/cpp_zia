@@ -7,13 +7,19 @@
 
 #include <functional>
 #include <thread>
+#include <mutex>
 
 class HttpHandler : public std::thread
 {
+private:
+    std::mutex  lock;
+    HttpHandler *refToThreadPool;
+    bool canStart;
+
 public:
     explicit HttpHandler();
     void     run();
-    ~HttpHandler();
+    void setRefToThreadPool(HttpHandler *refToThreadPool);
 };
 
 
