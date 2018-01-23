@@ -5,10 +5,14 @@
 #ifndef CPP_ZIA_HTTPHANDLER_HPP
 #define CPP_ZIA_HTTPHANDLER_HPP
 
+#include <functional>
+#include <thread>
 
-class HttpHandler
+class HttpHandler : public std::thread
 {
-
+public:
+    explicit HttpHandler();
+    void     run();
 };
 
 

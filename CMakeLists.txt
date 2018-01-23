@@ -11,13 +11,15 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 set(SOURCES sources/main.cpp
-        sources/Thread/HttpHandler.cpp)
+        sources/Thread/HttpHandler.cpp sources/Static/ServerConfig.cpp)
 
 
-set(INCLUDE include/Thread/HttpHandler.hpp)
+set(INCLUDE include/Thread/HttpHandler.hpp include/Static/ServerConfig.hpp include/Static/static_constructor.hpp)
 
 include_directories(include)
 
 add_executable(${TARGET_NAME} ${SOURCES} ${INCLUDE})
+
+add_subdirectory(tests)
 
 

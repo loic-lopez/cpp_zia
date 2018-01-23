@@ -3,4 +3,14 @@
 //
 
 #include <Thread/HttpHandler.hpp>
+#include <iostream>
 
+HttpHandler::HttpHandler() : thread(&HttpHandler::run, this)
+{
+
+}
+
+void HttpHandler::run()
+{
+    std::cerr << "COUCOU" << std::endl;
+}
