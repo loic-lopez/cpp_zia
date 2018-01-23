@@ -16,11 +16,20 @@ endif()
 #add_subdirectory(test)
 
 
-set(SOURCES sources/main.cpp
-        sources/Thread/HttpHandler.cpp sources/Static/ServerConfig.cpp)
+set(SOURCES
+        sources/main.cpp
+        sources/Thread/HttpHandler.cpp
+        sources/Static/ServerConfig.cpp)
 
 
-set(INCLUDE include/Thread/HttpHandler.hpp include/Static/ServerConfig.hpp include/Static/static_constructor.hpp)
+set(INCLUDE
+        include/Thread/HttpHandler.hpp
+        include/Static/ServerConfig.hpp
+        include/Static/static_constructor.hpp
+        include/api/conf.h
+        include/api/http.h
+        include/api/module.h
+        include/api/net.h)
 
 include_directories(include)
 
