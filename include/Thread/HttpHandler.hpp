@@ -13,7 +13,6 @@ class HttpHandler : public std::thread
 public:
     explicit HttpHandler();
     void     run();
-    ~HttpHandler();
 };
 
 
