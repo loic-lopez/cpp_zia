@@ -26,10 +26,27 @@ void ServerCore::run()
     {
         threadPool.addThread();
     }
-    std::cout << threadPool.getThreads().size() << std::endl;
+    while (true)
+    {
+        if (threadPool.isEmptyThreadPool())
+        {
+            threadPool.shutdown();
+            std::cout << threadPool.getThreads().size() << std::endl;
+            break;
+        }
+        std::cout << threadPool.getThreads().size() << std::endl;
+    }
+
+    std::cout << "all job terminated" << std::endl;
+
 }
 
 ServerCore &ServerCore::Instance()
 {
     return m_instance;
+}
+
+std::mutex &ServerCore::getLock()
+{
+    return lock;
 }

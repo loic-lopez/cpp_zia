@@ -14,6 +14,9 @@ class ThreadPool
 private:
     static ThreadPool m_instance;
     std::vector<HttpHandler *> threads;
+    std::mutex        lock;
+    bool            activeThreadRemover;
+    std::thread     threadRemover;
 
     ThreadPool();
     ~ThreadPool();
@@ -23,7 +26,9 @@ private:
 public:
     static ThreadPool& Instance();
     void addThread();
-    void removeTerminatedThread(HttpHandler *thread);
+    void handleRemoveTerminatedThreads();
+    bool isEmptyThreadPool();
+    void shutdown();
 
     const std::vector<HttpHandler *> &getThreads() const;
 

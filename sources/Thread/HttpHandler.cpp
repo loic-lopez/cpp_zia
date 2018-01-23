@@ -2,23 +2,20 @@
 // Created by loic lopez on 22/01/2018.
 //
 
-#include <iostream>
 #include <Thread/ThreadPool.hpp>
+#include <Core/ServerCore.hpp>
+#include <iostream>
 
-HttpHandler::HttpHandler() : canStart(false), thread(&HttpHandler::run, this)
+HttpHandler::HttpHandler() : terminated(false),
+                             lock(ServerCore::Instance().getLock()),
+                             thread(&HttpHandler::run, this)
 {
 }
 
 void HttpHandler::run()
 {
-    while (!canStart);
-    this->lock.try_lock();
-    ThreadPool::Instance().removeTerminatedThread(refToThreadPool);
+    while (!this->lock.try_lock());
+    std::cerr << "THREAD RUNNING" << std::endl;
     this->lock.unlock();
-}
-
-void HttpHandler::setRefToThreadPool(HttpHandler *refToThreadPool)
-{
-    HttpHandler::refToThreadPool = refToThreadPool;
-    canStart = true;
+    terminated = true;
 }

@@ -12,14 +12,13 @@
 class HttpHandler : public std::thread
 {
 private:
-    std::mutex  lock;
-    HttpHandler *refToThreadPool;
-    bool canStart;
-
+    std::mutex  &lock;
 public:
+
     explicit HttpHandler();
     void     run();
-    void setRefToThreadPool(HttpHandler *refToThreadPool);
+
+    bool terminated;
 };
 
 
