@@ -44,6 +44,9 @@ set(INCLUDE
 include_directories(include)
 
 add_executable(${TARGET_NAME} ${SOURCES} ${INCLUDE})
+if (UNIX)
+    target_link_libraries(${TARGET_NAME} stdc++fs)
+endif()
 
 add_subdirectory(tests)
 
