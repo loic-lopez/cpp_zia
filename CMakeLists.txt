@@ -3,7 +3,6 @@ project(cpp_zia)
 set(TARGET_NAME zia)
 set(CMAKE_CXX_STANDARD 17)
 
-
 if (APPLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lstdc++fs")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -gdwarf-3")
@@ -11,7 +10,13 @@ if (APPLE)
 elseif (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 elseif (UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lstdc++fs")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread")
+    add_library(stdc++fs UNKNOWN IMPORTED)
+    if (${CMAKE_SYSTEM} MATCHES "\\.fc[1-9]")
+        set_property(TARGET stdc++fs PROPERTY IMPORTED_LOCATION "/usr/lib/gcc/x86_64-redhat-linux/7/libstdc++fs.a")
+    else()
+        set_property(TARGET stdc++fs PROPERTY IMPORTED_LOCATION "/usr/lib/gcc/x86_64-linux-gnu/7/libstdc++fs.a")
+    endif()
 endif()
 
 set(SOURCES
@@ -38,6 +43,9 @@ set(INCLUDE
 include_directories(include)
 
 add_executable(${TARGET_NAME} ${SOURCES} ${INCLUDE})
+if (UNIX)
+    target_link_libraries(${TARGET_NAME} stdc++fs)
+endif()
 
 add_subdirectory(tests)
 
