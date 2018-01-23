@@ -6,6 +6,7 @@
 #include <Static/ServerConfig.hpp>
 
 namespace fs = std::experimental::filesystem;
+namespace Json = nlohmann;
 
 std::string ServerConfig::ServerIP;
 unsigned int ServerConfig::ServerPort;
@@ -20,6 +21,9 @@ inline void ServerConfig::DefaultConfig()
 
 bool ServerConfig::LoadConfigFromFile(const std::string &file)
 {
+    Json::json j;
+
+    j.lo
 
     return false;
 }
