@@ -7,7 +7,7 @@
 std::string ServerConfig::ServerIP;
 unsigned int ServerConfig::ServerPort;
 
-void ServerConfig::DefaultConfig()
+inline void ServerConfig::DefaultConfig()
 {
     (void)static_constructor<&ServerConfig::DefaultConfig>::c;
 
@@ -15,7 +15,13 @@ void ServerConfig::DefaultConfig()
     ServerPort = 80;
 }
 
-bool ServerConfig::LoadConfigFromFile(const std::string &file)
+inline bool ServerConfig::LoadConfigFromFile(const std::string &file)
 {
+
     return false;
 }
+
+inline bool ServerConfig::isConfigFileExistant(const std::string &file)
+{
+}
+

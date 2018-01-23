@@ -14,3 +14,8 @@ void HttpHandler::run()
 {
     std::cerr << "COUCOU" << std::endl;
 }
+
+HttpHandler::~HttpHandler()
+{
+    this->join();
+}
