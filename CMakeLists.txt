@@ -3,6 +3,7 @@ project(cpp_zia)
 set(TARGET_NAME zia)
 set(CMAKE_CXX_STANDARD 17)
 
+
 if (APPLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lstdc++fs")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -gdwarf-3")
@@ -43,9 +44,6 @@ set(INCLUDE
 include_directories(include)
 
 add_executable(${TARGET_NAME} ${SOURCES} ${INCLUDE})
-if (UNIX)
-    target_link_libraries(${TARGET_NAME} stdc++fs)
-endif()
 
 add_subdirectory(tests)
 
