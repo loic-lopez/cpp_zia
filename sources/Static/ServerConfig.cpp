@@ -8,15 +8,15 @@
 namespace fs = std::experimental::filesystem;
 namespace Json = nlohmann;
 
-std::string ServerConfig::ServerIP;
-unsigned int ServerConfig::ServerPort;
+zia::api::ConfValue ServerConfig::ServerIP;
+zia::api::ConfValue ServerConfig::ServerPort;
 
 inline void ServerConfig::DefaultConfig()
 {
     (void) static_constructor<&ServerConfig::DefaultConfig>::c;
 
-    ServerIP = "127.0.0.1";
-    ServerPort = 80;
+    ServerIP.v = "127.0.0.1";
+    ServerPort.v = 80;
 }
 
 bool ServerConfig::LoadConfigFromFile(const std::string &file)

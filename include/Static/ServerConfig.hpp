@@ -8,6 +8,7 @@
 #include <string>
 #include <Library/json.hpp>
 #include "static_constructor.hpp"
+#include "api/conf.h"
 
 class ServerConfig
 {
@@ -15,8 +16,8 @@ private:
     static void DefaultConfig();
 
 public:
-    static unsigned int ServerPort;
-    static std::string  ServerIP;
+    static zia::api::ConfValue ServerPort;
+    static zia::api::ConfValue ServerIP;
 
     static bool LoadConfigFromFile(const std::string &file);
     static bool isConfigFileExists(const std::string &file);
