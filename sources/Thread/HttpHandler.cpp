@@ -7,7 +7,6 @@
 #include <iostream>
 
 HttpHandler::HttpHandler() : terminated(false),
-                             lock(ServerCore::Instance().getLock()),
                              thread(&HttpHandler::run, this)
 {
 }
@@ -16,9 +15,9 @@ void HttpHandler::run()
 {
     while (!terminated)
     {
-        if (this->lock.try_lock())
+        if (ServerCore::Instance().getLock().try_lock())
         {
-            this->lock.unlock();
+            ServerCore::Instance().getLock().unlock();
             break;
         }
     }
