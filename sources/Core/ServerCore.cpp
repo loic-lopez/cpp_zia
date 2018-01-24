@@ -22,6 +22,7 @@ ServerCore::ServerCore() : threadPool(ThreadPool::Instance())
 
 ServerCore::~ServerCore()
 {
+    closesocket(serverSocket->socket);
 }
 
 ServerCore &ServerCore::Instance()
