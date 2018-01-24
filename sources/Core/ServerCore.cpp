@@ -17,7 +17,6 @@ ServerCore::ServerCore() : threadPool(ThreadPool::Instance())
 
 ServerCore::~ServerCore()
 {
-
 }
 
 void ServerCore::run()
