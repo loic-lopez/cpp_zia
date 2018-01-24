@@ -11,6 +11,7 @@
 #define CPP_ZIA_REQPARSER_HPP
 
 #include <vector>
+#include <map>
 #include "IParser.hpp"
 #include "Enum.hpp"
 
@@ -19,6 +20,7 @@ class ReqParser : public IParser
     std::vector<std::string>    dividedRequestLines;
     std::vector<std::string>    dividedRequestWords;
     zia::api::HttpRequest       request;
+    std::map<std::string, zia::api::http::Method>   type;
 
 public:
     ReqParser();

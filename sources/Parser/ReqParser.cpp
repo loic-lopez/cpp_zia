@@ -12,7 +12,15 @@
 
 ReqParser::ReqParser()
 {
-
+    this->type.insert({"GET", zia::api::http::Method::get});
+    this->type.insert({"OPTIONS", zia::api::http::Method::options});
+    this->type.insert({"HEAD", zia::api::http::Method::head});
+    this->type.insert({"POST", zia::api::http::Method::post});
+    this->type.insert({"PUT", zia::api::http::Method::put});
+    this->type.insert({"DELETE", zia::api::http::Method::delete_});
+    this->type.insert({"TRACE", zia::api::http::Method::trace});
+    this->type.insert({"CONNECT", zia::api::http::Method::connect});
+    this->type.insert({"UNKNOWN", zia::api::http::Method::unknown});
 }
 
 ReqParser::~ReqParser()
@@ -46,5 +54,7 @@ void ReqParser::parseHttpFormat(std::string httpRequest)
 
 void ReqParser::treatHttp1_1()
 {
+    this->request.version = zia::api::http::Version::http_1_1;
+    this->request.method = this->type[this->dividedRequestWords[0]];
 
 }
