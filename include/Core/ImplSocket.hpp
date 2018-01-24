@@ -4,19 +4,31 @@
 
 #ifndef CPP_ZIA_IMPLSOCKET_HPP
 #define CPP_ZIA_IMPLSOCKET_HPP
-#ifdef  _WIN32
 
-#include <winsock.h>
+#ifdef WIN32
+
+#include <winsock2.h>
 
 #else
+
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <netinet/ip.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <netdb.h>
+#endif
+
+#ifndef CPP_ZIA_SOCKET
+#define CPP_ZIA_SOCKET
+#define INVALID_SOCKET -1
+#define SOCKET_ERROR -1
+#define closesocket(s) close(s)
 #endif
 
 struct ImplSocket {
     int socket;
-    struct sockaddr_in server;
+    struct sockaddr_in sockaddr;
 };
 
 #endif //CPP_ZIA_IMPLSOCKET_HPP
