@@ -1,4 +1,5 @@
 {
   "port": "80",
-  "root": "/toto/titi"
+  "root": "/toto/titi",
+  "server_name": "localhost"
 }

@@ -39,9 +39,12 @@ bool ServerConfig::LoadConfigFromFile()
             DocumentWebRootPath.v = std::string(it.value());
         else if (it.key() == "port")
             ServerPort.v = std::atoll(std::string(it.value()).c_str());
+        else if (it.key() == "server_name")
+            ServerIP.v = std::string(it.value());
     }
 
     std::cout << std::get<std::string>(DocumentWebRootPath.v) << std::endl;
+    std::cout << std::get<std::string>(ServerIP.v) << std::endl;
     std::cout << std::get<long long>(ServerPort.v) << std::endl;
     return false;
 }
