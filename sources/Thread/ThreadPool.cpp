@@ -20,6 +20,7 @@ ThreadPool::ThreadPool() : activeThreadRemover(true),
 
 ThreadPool::~ThreadPool()
 {
+
 }
 
 void ThreadPool::addThread()
