@@ -9,10 +9,6 @@ ServerCore ServerCore::m_instance = ServerCore();
 
 ServerCore::ServerCore() : threadPool(ThreadPool::Instance())
 {
-    if (ServerConfig::isConfigFileExists())
-        ServerConfig::LoadConfigFromFile();
-    else
-        std::cout << "not found" << std::endl;
 }
 
 ServerCore::~ServerCore()
@@ -44,3 +40,24 @@ ServerCore &ServerCore::Instance()
 {
     return m_instance;
 }
+
+bool ServerCore::config(const zia::api::Conf &conf) {
+    if (ServerConfig::isConfigFileExists())
+        return true;
+    else
+        return false;
+}
+
+bool ServerCore::run(zia::api::Net::Callback cb) {
+    return false;
+}
+
+bool ServerCore::send(zia::api::ImplSocket *sock, const zia::api::Net::Raw &resp) {
+
+    return false;
+}
+
+bool ServerCore::stop() {
+    return false;
+}
+

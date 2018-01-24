@@ -35,7 +35,7 @@ set(INCLUDE
         include/api/module.h
         include/api/net.h
         include/Library/json.hpp
-        include/Core/ServerCore.hpp include/Thread/ThreadPool.hpp)
+        include/Core/ServerCore.hpp include/Thread/ThreadPool.hpp include/Core/ImplSocket.hpp)
 
 
 include_directories(include)

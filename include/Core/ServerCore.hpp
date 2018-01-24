@@ -7,8 +7,9 @@
 
 #include <Static/ServerConfig.hpp>
 #include <Thread/ThreadPool.hpp>
+#include <api/net.h>
 
-class ServerCore
+class ServerCore : public  zia::api::Net
 {
 private:
     static ServerCore m_instance;
@@ -26,6 +27,10 @@ private:
 public:
     static ServerCore& Instance();
     void run();
+    virtual bool config(const zia::api::Conf& conf);
+    virtual bool run(Callback cb);
+    virtual bool send(zia::api::ImplSocket* sock, const Raw& resp);
+    virtual bool stop();
 };
 
 
