@@ -19,6 +19,7 @@ public:
     static zia::api::ConfValue ServerPort;
     static zia::api::ConfValue ServerIP;
     static zia::api::ConfValue ConfigPath;
+    static zia::api::ConfValue DocumentWebRootPath;
 
     static bool LoadConfigFromFile();
     static bool isConfigFileExists();

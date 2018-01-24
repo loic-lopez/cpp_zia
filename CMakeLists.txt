@@ -49,6 +49,10 @@ add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/config $<TARGET_FILE_DIR:${TARGET_NAME}>/config)
 
+add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/html $<TARGET_FILE_DIR:${TARGET_NAME}>/html)
+
 add_subdirectory(tests)
 
 
