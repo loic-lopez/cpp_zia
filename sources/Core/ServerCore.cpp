@@ -9,8 +9,8 @@ ServerCore ServerCore::m_instance = ServerCore();
 
 ServerCore::ServerCore() : threadPool(ThreadPool::Instance())
 {
-    if (ServerConfig::isConfigFileExists("config/zia.conf.json"))
-        std::cout << "found" << std::endl;
+    if (ServerConfig::isConfigFileExists())
+        ServerConfig::LoadConfigFromFile();
     else
         std::cout << "not found" << std::endl;
 }

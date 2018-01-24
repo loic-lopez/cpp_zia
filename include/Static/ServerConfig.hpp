@@ -18,9 +18,10 @@ private:
 public:
     static zia::api::ConfValue ServerPort;
     static zia::api::ConfValue ServerIP;
+    static zia::api::ConfValue ConfigPath;
 
-    static bool LoadConfigFromFile(const std::string &file);
-    static bool isConfigFileExists(const std::string &file);
+    static bool LoadConfigFromFile();
+    static bool isConfigFileExists();
 
 };
 
