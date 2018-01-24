@@ -38,13 +38,16 @@ void ThreadPool::handleRemoveTerminatedThreads()
 {
     while (activeThreadRemover)
     {
+        std::cout << "Sieg" << std::endl;
         if (this->lock.try_lock())
         {
             for (auto thread : threads)
             {
                 if (thread->terminated)
                 {
+                    std::cerr << "Heil" << std::endl;
                     thread->join();
+                    std::cerr << "Join" << std::endl;
                     this->threads.erase(std::remove(threads.begin(), threads.end(), thread), threads.end());
                     delete thread;
                     break;

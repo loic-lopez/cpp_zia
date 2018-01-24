@@ -14,8 +14,13 @@ HttpHandler::HttpHandler() : terminated(false),
 
 void HttpHandler::run()
 {
-    while (!this->lock.try_lock());
+    while (!terminated)
+    {
+        if (this->lock.try_lock())
+        {
+            this->lock.unlock();
+            terminated = true;
+        }
+    }
     std::cerr << "THREAD RUNNING" << std::endl;
-    this->lock.unlock();
-    terminated = true;
 }

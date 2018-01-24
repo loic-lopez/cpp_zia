@@ -21,7 +21,7 @@ private:
     ThreadPool();
     ~ThreadPool();
     ThreadPool& operator= (const ThreadPool&){}
-    ThreadPool (const ThreadPool&) = default;
+    ThreadPool (const ThreadPool&) : activeThreadRemover(true), threadRemover(&ThreadPool::handleRemoveTerminatedThreads, this){ };
 
 public:
     static ThreadPool& Instance();

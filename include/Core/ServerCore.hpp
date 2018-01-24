@@ -16,7 +16,10 @@ private:
     std::mutex lock;
 
     ServerCore& operator= (const ServerCore&){}
-    ServerCore (const ServerCore&) = default;
+    ServerCore (const ServerCore&) : threadPool(ThreadPool::Instance())
+    {
+
+    };
 
     ServerCore();
     ~ServerCore();
