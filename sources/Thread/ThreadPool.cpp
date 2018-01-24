@@ -29,7 +29,7 @@ ThreadPool::~ThreadPool()
 
 }
 
-void ThreadPool::addThread()
+void ThreadPool::addThread(zia::api::Net::Raw, zia::api::NetInfo)
 {
     while (!this->lock.try_lock());
     this->threads.emplace_back(new HttpHandler());

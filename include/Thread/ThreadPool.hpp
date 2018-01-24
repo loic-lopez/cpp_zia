@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <vector>
+#include <api/net.h>
 #include "HttpHandler.hpp"
 
 class ThreadPool
@@ -25,7 +26,7 @@ private:
 
 public:
     static ThreadPool& Instance();
-    void addThread();
+    void addThread(zia::api::Net::Raw, zia::api::NetInfo);
     void handleRemoveTerminatedThreads();
     bool isEmptyThreadPool();
     void shutdown();

@@ -15,10 +15,6 @@ ServerCore::~ServerCore()
 {
 }
 
-void ServerCore::run()
-{
-}
-
 ServerCore &ServerCore::Instance()
 {
     return m_instance;
@@ -31,10 +27,11 @@ bool ServerCore::config(const zia::api::Conf &conf) {
         return false;
 }
 
-bool ServerCore::run(zia::api::Net::Callback cb) {
+bool ServerCore::run(zia::api::Net::Callback callback) {
     for (int i = 0; i < 10; ++i)
     {
-        threadPool.addThread();
+        zia::api::NetInfo netInfo;
+        callback(zia::api::Net::Raw(), netInfo);
     }
     while (true)
     {

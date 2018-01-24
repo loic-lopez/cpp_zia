@@ -26,11 +26,14 @@ private:
 
 public:
     static ServerCore& Instance();
-    void run();
-    virtual bool config(const zia::api::Conf& conf);
-    virtual bool run(Callback cb);
-    virtual bool send(zia::api::ImplSocket* sock, const Raw& resp);
-    virtual bool stop();
+
+    bool config(const zia::api::Conf& conf) override;
+
+    bool run(Callback cb) override;
+
+    bool send(zia::api::ImplSocket* sock, const Raw& resp) override;
+
+    bool stop() override;
 };
 
 
