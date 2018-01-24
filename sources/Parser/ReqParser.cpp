@@ -22,20 +22,29 @@ ReqParser::~ReqParser()
 
 void ReqParser::parseHttpFormat(std::string httpRequest)
 {
-    std::string line;
-    std::size_t pos;
-    std::size_t lastPos = 0;
+    std::stringstream   line(httpRequest);
+    std::string         segment;
 
-    while (pos != std::string::npos)
+    while (std::getline(line, segment, '\n'))
+        this->dividedRequestLines.push_back(segment);
+
+    for (const auto &request : dividedRequestLines)
     {
-        httpRequest.find("\n", pos);
-        std::cout << std::endl;
-        //std::cout << httpRequest.substr(lastPos, pos) << std::endl;
-            //this->dividedRequest.emplace_back(httpRequest.substr(lastPos, pos));
-            lastPos = pos + 1;
+        std::stringstream   line(request);
+        while (std::getline(line, segment, ' '))
+            this->dividedRequestWords.push_back(segment);
     }
-    for (int i = 0; i < this->dividedRequest.size(); ++i)
+    for (const auto &version : dividedRequestWords)
     {
-        std::cout << this->dividedRequest[i] << std::endl;
+        if (version.find("HTTP/1.1") != std::string::npos)
+        {
+            treatHttp1_1();
+            break;
+        }
     }
+}
+
+void ReqParser::treatHttp1_1()
+{
+
 }

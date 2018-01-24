@@ -13,6 +13,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include "api/http.h"
 
 class IParser
 {
@@ -20,6 +22,7 @@ public:
     ~IParser(){};
 
     virtual void parseHttpFormat(std::string) = 0;
+    virtual void treatHttp1_1() = 0;
 
 };
 

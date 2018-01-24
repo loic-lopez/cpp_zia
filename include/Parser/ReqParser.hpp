@@ -16,18 +16,16 @@
 
 class ReqParser : public IParser
 {
-    HttpRequestType type;
-    std::string     host;
-    std::string     referer;
-    std::string     userAgent;
-    //Request's content
+    std::vector<std::string>    dividedRequestLines;
+    std::vector<std::string>    dividedRequestWords;
+    zia::api::HttpRequest       request;
 
-    std::vector<std::string>    dividedRequest;
 public:
     ReqParser();
     ~ReqParser();
 
     virtual void parseHttpFormat(std::string);
+    virtual void treatHttp1_1();
 
 };
 

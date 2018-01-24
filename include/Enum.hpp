@@ -10,16 +10,13 @@
 #ifndef CPP_ZIA_ENUM_HPP
 #define CPP_ZIA_ENUM_HPP
 
-enum HttpRequestType
+enum ParsingStatus
 {
-    GET,
-    POST
-};
-
-enum AnswerType
-{
-    FAILURE,
-    SUCCESS
+    TYPE,
+    FILE,
+    USER_AGENT,
+    HOST,
+    ACCEPT_LANGUAGE
 };
 
 #endif //CPP_ZIA_ENUM_HPP
