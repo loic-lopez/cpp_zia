@@ -45,6 +45,10 @@ if (UNIX)
     target_link_libraries(${TARGET_NAME} stdc++fs)
 endif()
 
+add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/config $<TARGET_FILE_DIR:${TARGET_NAME}>/config)
+
 add_subdirectory(tests)
 
 
