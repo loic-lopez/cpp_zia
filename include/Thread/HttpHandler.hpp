@@ -11,8 +11,6 @@
 
 class HttpHandler : public std::thread
 {
-private:
-    std::mutex  &lock;
 public:
 
     explicit HttpHandler();
