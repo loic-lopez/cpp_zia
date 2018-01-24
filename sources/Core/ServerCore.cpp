@@ -17,6 +17,21 @@ ServerCore::~ServerCore()
 
 void ServerCore::run()
 {
+}
+
+ServerCore &ServerCore::Instance()
+{
+    return m_instance;
+}
+
+bool ServerCore::config(const zia::api::Conf &conf) {
+    if (ServerConfig::isConfigFileExists())
+        return true;
+    else
+        return false;
+}
+
+bool ServerCore::run(zia::api::Net::Callback cb) {
     for (int i = 0; i < 10; ++i)
     {
         threadPool.addThread();
@@ -33,23 +48,7 @@ void ServerCore::run()
     }
 
     std::cout << "all job terminated" << std::endl;
-
-}
-
-ServerCore &ServerCore::Instance()
-{
-    return m_instance;
-}
-
-bool ServerCore::config(const zia::api::Conf &conf) {
-    if (ServerConfig::isConfigFileExists())
-        return true;
-    else
-        return false;
-}
-
-bool ServerCore::run(zia::api::Net::Callback cb) {
-    return false;
+    return true;
 }
 
 bool ServerCore::send(zia::api::ImplSocket *sock, const zia::api::Net::Raw &resp) {
