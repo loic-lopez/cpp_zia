@@ -13,7 +13,6 @@ class ServerCore
 private:
     static ServerCore m_instance;
     ThreadPool  &threadPool;
-    std::mutex lock;
 
     ServerCore& operator= (const ServerCore&){}
     ServerCore (const ServerCore&) : threadPool(ThreadPool::Instance())
@@ -27,9 +26,6 @@ private:
 public:
     static ServerCore& Instance();
     void run();
-
-    std::mutex &getLock();
-
 };
 
 

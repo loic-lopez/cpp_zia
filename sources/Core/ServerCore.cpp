@@ -44,8 +44,3 @@ ServerCore &ServerCore::Instance()
 {
     return m_instance;
 }
-
-std::mutex &ServerCore::getLock()
-{
-    return lock;
-}

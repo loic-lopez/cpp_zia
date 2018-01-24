@@ -18,6 +18,12 @@ ThreadPool::ThreadPool() : activeThreadRemover(true),
 {
 }
 
+std::mutex &ThreadPool::getLock()
+{
+    return lock;
+}
+
+
 ThreadPool::~ThreadPool()
 {
 

@@ -31,6 +31,7 @@ public:
     void shutdown();
 
     const std::vector<HttpHandler *> &getThreads() const;
+    std::mutex &getLock();
 
 };
 
