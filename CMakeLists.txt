@@ -11,7 +11,7 @@ if (APPLE)
 elseif (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 elseif (UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -g")
     add_library(stdc++fs UNKNOWN IMPORTED)
     if (${CMAKE_SYSTEM} MATCHES "\\.fc[1-9]")
         set_property(TARGET stdc++fs PROPERTY IMPORTED_LOCATION "/usr/lib/gcc/x86_64-redhat-linux/7/libstdc++fs.a")
@@ -20,11 +20,9 @@ elseif (UNIX)
     endif()
 endif()
 
-set(SOURCES
-        sources/main.cpp
-        sources/Thread/HttpHandler.cpp
-        sources/Static/ServerConfig.cpp sources/Thread/ThreadPool.cpp sources/Core/ServerCore.cpp)
 
+set(SOURCES sources/main.cpp
+        sources/Parser/ReqParser.cpp sources/Parser/AnsParser.cpp)
 
 set(INCLUDE
         include/Thread/HttpHandler.hpp
@@ -37,6 +35,9 @@ set(INCLUDE
         include/Library/json.hpp
         include/Core/ServerCore.hpp include/Thread/ThreadPool.hpp)
 
+set(INCLUDE
+        include/Thread/HttpHandler.hpp
+        include/Parser/ReqParser.hpp include/Parser/IParser.hpp include/Enum.hpp include/Parser/AnsParser.hpp)
 
 include_directories(include)
 
