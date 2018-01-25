@@ -14,13 +14,13 @@ class HttpHandler : public std::thread
 {
 public:
 
-    explicit HttpHandler(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo, std::mutex *lock);
+    explicit HttpHandler(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo, ServerCoreId serverCoreId);
     void     run();
 
     bool terminated;
     zia::api::Net::Raw rawData;
     zia::api::NetInfo netInfo;
-    std::mutex *lock;
+    ServerCoreId serverCoreId;
 };
 
 

@@ -25,7 +25,7 @@ ThreadPool::~ThreadPool()
 void ThreadPool::addThread(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)
 {
     while (!this->lock.try_lock());
-    this->threads.emplace_back(new HttpHandler(std::move(rawData), std::move(netInfo), &lock));
+    this->threads.emplace_back(new HttpHandler(std::move(rawData), std::move(netInfo), serverCoreId));
     lock.unlock();
 }
 
@@ -54,4 +54,9 @@ void ThreadPool::shutdown()
 {
     activeThreadRemover = false;
     threadRemover.join();
+}
+
+void ThreadPool::setServerCoreId(ServerCoreId serverCoreId)
+{
+    ThreadPool::serverCoreId = serverCoreId;
 }

@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 #include <api/net.h>
+#include <Static/ServerConfig.hpp>
 #include "HttpHandler.hpp"
 
 class ThreadPool
@@ -17,7 +18,7 @@ private:
     std::mutex        lock;
     bool            activeThreadRemover;
     std::thread     threadRemover;
-
+    ServerCoreId   serverCoreId;
 
 public:
     ThreadPool();
@@ -29,6 +30,7 @@ public:
     void handleRemoveTerminatedThreads();
     void shutdown();
     std::mutex &getLock();
+    void setServerCoreId(ServerCoreId serverCoreId);
 
 };
 

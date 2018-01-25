@@ -21,6 +21,7 @@ private:
 
 public:
     void launch();
+    zia::api::Net *getServer(ServerCoreId serverCoreId);
     static ServerLauncher& Instance();
 };
 

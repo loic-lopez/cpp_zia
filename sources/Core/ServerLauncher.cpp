@@ -38,3 +38,9 @@ void ServerLauncher::launch()
 
     while (true);
 }
+
+zia::api::Net *ServerLauncher::getServer(ServerCoreId serverCoreId)
+{
+    return this->servers.at(serverCoreId).get();
+}
+
