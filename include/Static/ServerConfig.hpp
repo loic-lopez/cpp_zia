@@ -5,9 +5,16 @@
 #ifndef CPP_ZIA_CONFIG_HPP
 #define CPP_ZIA_CONFIG_HPP
 
+#ifdef WIN32
+
+#pragma comment(lib, "Ws2_32.lib")
+#include <winsock2.h>
+
+#else
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#endif
 #include <fstream>
 #include <iostream>
 #include <string>

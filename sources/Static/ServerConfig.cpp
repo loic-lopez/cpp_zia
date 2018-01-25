@@ -30,16 +30,15 @@ bool ServerConfig::LoadConfigFromFile()
 
     configFile >> json;
 
-    for (Json::json::iterator it = json.begin(); it != json.end(); ++it)
-    {
+    for (Json::json::iterator it = json.begin(); it != json.end(); ++it) {
+        std::string str = it.value();
         if (it.key() == "root")
-            DocumentWebRootPath.v = std::string(it.value());
+            DocumentWebRootPath.v = str;
         else if (it.key() == "port")
-            ServerPort.v = std::atoll(std::string(it.value()).c_str());
+            ServerPort.v = std::atoll(str.c_str());
         else if (it.key() == "server_name")
-            ServerIP.v = std::string(it.value());
+            ServerIP.v = str;
     }
-
     std::cout << std::get<std::string>(DocumentWebRootPath.v) << std::endl;
     std::cout << std::get<std::string>(ServerIP.v) << std::endl;
     std::cout << std::get<long long>(ServerPort.v) << std::endl;
