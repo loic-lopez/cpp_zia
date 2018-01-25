@@ -23,6 +23,4 @@ void HttpHandler::run()
 }
 
 HttpHandler::~HttpHandler()
-{
-
-}
+= default;
