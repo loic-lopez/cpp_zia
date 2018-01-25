@@ -61,7 +61,7 @@ bool ServerCore::run(zia::api::Net::Callback callback) {
         std::cout << threadPool.getThreads().size() << std::endl;
     }
 
-    std::cout << "all job terminated" << std::endl;
+    std::cout << "all job  terminated" << std::endl;
     return true;
 }
 
