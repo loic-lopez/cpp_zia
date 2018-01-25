@@ -5,9 +5,7 @@
 #include <iostream>
 #include <Core/ServerCore.hpp>
 
-ServerCore ServerCore::m_instance = ServerCore();
-
-ServerCore::ServerCore() : threadPool(ThreadPool::Instance())
+ServerCore::ServerCore()
 {
 #ifdef WIN32
     WSADATA WSAData;
@@ -28,24 +26,11 @@ ServerCore::~ServerCore()
 #endif
 }
 
-ServerCore &ServerCore::Instance()
-{
-    return m_instance;
-}
-
 bool ServerCore::config(const zia::api::Conf &conf) {
-    if (ServerConfig::isConfigFileExists())
-        return true;
-    else
-        return false;
+    return false;
 }
 
 bool ServerCore::run(zia::api::Net::Callback callback) {
-   /* for (int i = 0; i < 10; ++i)
-    {
-        zia::api::NetInfo netInfo;
-        callback(zia::api::Net::Raw(), netInfo);
-    }*/
 
 #if defined(__APPLE__) || defined(__linux__)
     long long port = std::get<long long>(ServerConfig::ServerPort.v);
@@ -101,4 +86,9 @@ bool ServerCore::send(zia::api::ImplSocket *sock, const zia::api::Net::Raw &resp
 
 bool ServerCore::stop() {
     return false;
+}
+
+ThreadPool &ServerCore::getThreadPool()
+{
+    return threadPool;
 }

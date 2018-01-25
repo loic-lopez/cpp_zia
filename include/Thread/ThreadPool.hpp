@@ -13,25 +13,21 @@
 class ThreadPool
 {
 private:
-    static ThreadPool m_instance;
     std::vector<HttpHandler *> threads;
     std::mutex        lock;
     bool            activeThreadRemover;
     std::thread     threadRemover;
 
+
+public:
     ThreadPool();
     ~ThreadPool();
     ThreadPool& operator= (const ThreadPool&){}
     ThreadPool (const ThreadPool&) : activeThreadRemover(true), threadRemover(&ThreadPool::handleRemoveTerminatedThreads, this){ };
 
-public:
-    static ThreadPool& Instance();
     void addThread(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo);
     void handleRemoveTerminatedThreads();
-    bool isEmptyThreadPool();
     void shutdown();
-
-    const std::vector<HttpHandler *> &getThreads() const;
     std::mutex &getLock();
 
 };

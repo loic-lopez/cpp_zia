@@ -23,7 +23,7 @@ endif()
 set(SOURCES
         sources/main.cpp
         sources/Thread/HttpHandler.cpp
-        sources/Static/ServerConfig.cpp sources/Thread/ThreadPool.cpp sources/Core/ServerCore.cpp)
+        sources/Static/ServerConfig.cpp sources/Thread/ThreadPool.cpp sources/Core/ServerCore.cpp sources/Core/ServerLauncher.cpp)
 
 
 set(INCLUDE
@@ -35,7 +35,7 @@ set(INCLUDE
         include/api/module.h
         include/api/net.h
         include/Library/json.hpp
-        include/Core/ServerCore.hpp include/Thread/ThreadPool.hpp include/Core/ImplSocket.hpp)
+        include/Core/ServerCore.hpp include/Thread/ThreadPool.hpp include/Core/ImplSocket.hpp include/Core/ServerLauncher.hpp include/Library/ScanDir.hpp)
 
 
 include_directories(include)

@@ -11,23 +11,19 @@
 #include <memory>
 #include "ImplSocket.hpp"
 
-class ServerCore : public  zia::api::Net
+class ServerCore : public zia::api::Net
 {
 private:
-    static ServerCore m_instance;
-    ThreadPool  &threadPool;
+    ThreadPool  threadPool;
     std::shared_ptr<zia::api::ImplSocket> serverSocket;
-    ServerCore& operator= (const ServerCore&){}
-    ServerCore (const ServerCore&) : threadPool(ThreadPool::Instance())
-    {
+    std::string  webRootPath;
+    int          port;
 
-    };
+
+public:
 
     ServerCore();
     ~ServerCore();
-
-public:
-    static ServerCore& Instance();
 
     bool config(const zia::api::Conf& conf) override;
 
@@ -36,6 +32,8 @@ public:
     bool send(zia::api::ImplSocket* sock, const Raw& resp) override;
 
     bool stop() override;
+
+    ThreadPool &getThreadPool();
 };
 
 

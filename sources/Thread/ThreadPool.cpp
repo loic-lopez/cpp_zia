@@ -6,13 +6,6 @@
 #include <iostream>
 #include <Core/ServerCore.hpp>
 
-ThreadPool ThreadPool::m_instance = ThreadPool();
-
-ThreadPool &ThreadPool::Instance()
-{
-    return m_instance;
-}
-
 ThreadPool::ThreadPool() : activeThreadRemover(true),
                            threadRemover(&ThreadPool::handleRemoveTerminatedThreads, this)
 {
@@ -32,13 +25,8 @@ ThreadPool::~ThreadPool()
 void ThreadPool::addThread(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)
 {
     while (!this->lock.try_lock());
-    this->threads.emplace_back(new HttpHandler(std::move(rawData), std::move(netInfo)));
+    this->threads.emplace_back(new HttpHandler(std::move(rawData), std::move(netInfo), &lock));
     lock.unlock();
-}
-
-const std::vector<HttpHandler *> &ThreadPool::getThreads() const
-{
-    return threads;
 }
 
 void ThreadPool::handleRemoveTerminatedThreads()
@@ -60,14 +48,6 @@ void ThreadPool::handleRemoveTerminatedThreads()
             lock.unlock();
         }
     }
-}
-
-bool ThreadPool::isEmptyThreadPool()
-{
-    while (!this->lock.try_lock());
-    bool empty = threads.empty();
-    lock.unlock();
-    return empty;
 }
 
 void ThreadPool::shutdown()

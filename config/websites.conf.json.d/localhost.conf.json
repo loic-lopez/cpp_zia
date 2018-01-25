@@ -1,0 +1,5 @@
+{
+  "port": "8080",
+  "document_root": "/toto/titi",
+  "server_name": "localhost"
+}

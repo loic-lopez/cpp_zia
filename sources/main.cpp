@@ -2,12 +2,12 @@
 
 int main()
 {
-    ServerCore &serverCore = ServerCore::Instance();
+    ServerCore serverCore;
 
     serverCore.config(zia::api::Conf());
-    ServerCore::Instance().run([](zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)
+    serverCore.run([&serverCore](zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)
                                {
-                                   ThreadPool::Instance().addThread(std::move(rawData), std::move(netInfo));
+                                   serverCore.getThreadPool().addThread(std::move(rawData), std::move(netInfo));
                                });
 
 

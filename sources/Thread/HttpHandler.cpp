@@ -6,7 +6,8 @@
 #include <Thread/ThreadPool.hpp>
 #include <iostream>
 
-HttpHandler::HttpHandler(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo) :
+HttpHandler::HttpHandler(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo, std::mutex *lock) :
+        lock(lock),
         rawData(std::move(rawData)),
         netInfo(std::move(netInfo)),
         terminated(false),
@@ -18,7 +19,7 @@ void HttpHandler::run()
 {
     while (true)
     {
-        if (ThreadPool::Instance().getLock().try_lock())
+        if (lock->try_lock())
         {
             //ServerCore::Instance().send(/* insert socket and response*/);
             // SAMPLE OF HTTP HERE !!!!!!!!!!!!!! TODO: REPLACE WITH REAL PARSER AND REAL RESPONSE
@@ -40,7 +41,7 @@ void HttpHandler::run()
             send(netInfo.sock->socket, header.c_str(), header.size(), 0);
             send(netInfo.sock->socket, content.c_str(), content.size(), 0);
 
-            ThreadPool::Instance().getLock().unlock();
+            lock->unlock();
             break;
         }
     }
