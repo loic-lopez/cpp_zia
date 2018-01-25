@@ -19,20 +19,20 @@ static inline zia::api::ConfValue CreateConfValueFromType(T type)
     return confValue;
 }
 
-static inline bool fileEndsWith(const std::string& str, const std::string& suffix)
+static inline bool fileEndsWith(const std::string &str, const std::string &suffix)
 {
-    return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
+    return str.size() >= suffix.size() && 0 == str.compare(str.size() - suffix.size(), suffix.size(), suffix);
 }
 
 inline void ServerConfig::DefaultConfig()
 {
     (void) static_constructor<&ServerConfig::DefaultConfig>::c;
-    ServerCoreId  serverCoreId = 0;
+    ServerCoreId serverCoreId = 0;
     LoadDefaultServerConfig();
 
     std::string websitesPath = std::get<std::string>(ServerConf["websites_conf_dir"].v);
 
-    for (const auto& name : scandirpp::get_names(websitesPath))
+    for (const auto &name : scandirpp::get_names(websitesPath))
     {
         if (fileEndsWith(name, ".json"))
             WebSiteConfs[serverCoreId++] = LoadConfigFromFile(websitesPath + '/' + name);
@@ -40,7 +40,8 @@ inline void ServerConfig::DefaultConfig()
 
     if (WebSiteConfs.empty())
     {
-        WebSiteConfs[0] = [] () -> zia::api::ConfObject {
+        WebSiteConfs[0] = []() -> zia::api::ConfObject
+        {
             zia::api::ConfObject confObject;
 
             confObject["port"] = CreateConfValueFromType(static_cast<long long>(8080));
@@ -95,7 +96,8 @@ zia::api::ConfObject ServerConfig::LoadConfigFromFile(const std::string &path)
     zia::api::ConfObject confObject;
 
     configFile >> json;
-    for (Json::json::iterator it = json.begin(); it != json.end(); ++it) {
+    for (Json::json::iterator it = json.begin(); it != json.end(); ++it)
+    {
         std::string value = it.value();
         std::string key = it.key();
         zia::api::ConfValue confValue;
@@ -124,7 +126,8 @@ void ServerConfig::LoadDefaultServerConfig()
         std::ifstream configFile(fs::path("config/server.conf.json"));
 
         configFile >> json;
-        for (Json::json::iterator it = json.begin(); it != json.end(); ++it) {
+        for (Json::json::iterator it = json.begin(); it != json.end(); ++it)
+        {
             std::string value = it.value();
             std::string key = it.key();
 

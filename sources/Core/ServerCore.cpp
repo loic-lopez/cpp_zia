@@ -19,9 +19,10 @@ ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zi
     if (serverSocket->socket == INVALID_SOCKET)
         throw std::runtime_error("Cannot create socket.");
     config(conf);
-    this->serverThread = std::make_shared<std::thread>([&] () {
-        this->run(callback);
-    });
+    this->serverThread = std::make_shared<std::thread>([&]()
+                                                       {
+                                                           this->run(callback);
+                                                       });
 }
 
 ServerCore::~ServerCore()
