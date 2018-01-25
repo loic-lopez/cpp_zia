@@ -55,6 +55,10 @@ void ReqParser::parseHttpFormat(std::string httpRequest)
 void ReqParser::treatHttp1_1()
 {
     this->request.version = zia::api::http::Version::http_1_1;
-    this->request.method = this->type[this->dividedRequestWords[0]];
+    for (const auto &method : this->dividedRequestWords)
+    {
+        if (this->type.find(method) != std::map::end())
+            this->request.method = this->type[method];
+    }
 
 }
