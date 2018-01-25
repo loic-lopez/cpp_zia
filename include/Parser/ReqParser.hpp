@@ -21,13 +21,15 @@ class ReqParser : public IParser
     std::vector<std::string>    dividedRequestWords;
     zia::api::HttpRequest       request;
     std::map<std::string, zia::api::http::Method>   type;
+    std::string                 path;
 
 public:
     ReqParser();
     ~ReqParser();
 
-    virtual void parseHttpFormat(std::string);
-    virtual void treatHttp1_1();
+    virtual void    parseHttpFormat(std::string);
+    virtual void    treatHttp1_1();
+    void            fillHearders(std::string);
 
 };
 

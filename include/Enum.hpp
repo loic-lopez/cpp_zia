@@ -13,7 +13,7 @@
 enum ParsingStatus
 {
     TYPE,
-    FILE,
+    FILE_,
     USER_AGENT,
     HOST,
     ACCEPT_LANGUAGE

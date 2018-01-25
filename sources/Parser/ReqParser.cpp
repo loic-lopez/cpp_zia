@@ -55,10 +55,24 @@ void ReqParser::parseHttpFormat(std::string httpRequest)
 void ReqParser::treatHttp1_1()
 {
     this->request.version = zia::api::http::Version::http_1_1;
+    this->path = this->dividedRequestWords[1];
     for (const auto &method : this->dividedRequestWords)
     {
-        if (this->type.find(method) != std::map::end())
+        if (this->type.find(method) != this->type.end())
             this->request.method = this->type[method];
+        if (method.at(method.size() - 1) == ':')
+            fillHearders(method);
     }
 
+}
+
+void ReqParser::fillHearders(std::string toFind)
+{
+    for (const auto &headers : this->dividedRequestLines)
+    {
+        if (headers.find(toFind) != std::string::npos)
+        {
+            this->request.headers.insert({toFind, headers.substr(toFind.size() + 1)});
+        }
+    }
 }

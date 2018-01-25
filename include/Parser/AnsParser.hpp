@@ -15,7 +15,6 @@
 
 class AnsParser :public IParser
 {
-    AnswerType  type;
     int         returnedCode;
     std::string date;
     std::string server;
