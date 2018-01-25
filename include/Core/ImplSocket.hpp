@@ -7,6 +7,7 @@
 
 #ifdef WIN32
 
+#pragma comment(lib, "Ws2_32.lib")
 #include <winsock2.h>
 
 #else
@@ -17,17 +18,17 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <netdb.h>
-#endif
-
-#ifndef CPP_ZIA_SOCKET
-#define CPP_ZIA_SOCKET
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
 #define closesocket(s) close(s)
 #endif
 
 struct ImplSocket {
+#ifdef WIN32
+    SOCKET socket;
+#else
     int socket;
+#endif
     struct sockaddr_in sockaddr;
 };
 

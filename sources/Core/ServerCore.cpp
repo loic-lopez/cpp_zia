@@ -9,10 +9,26 @@ ServerCore ServerCore::m_instance = ServerCore();
 
 ServerCore::ServerCore() : threadPool(ThreadPool::Instance())
 {
+#if defined (WIN32)
+    WSADATA WSAData;
+    WSAStartup(MAKEWORD(2,2), &WSAData);
+#endif
+    serverSocket = std::shared_ptr<ImplSocket>(new ImplSocket());
+    serverSocket->socket = socket(AF_INET, SOCK_STREAM, 0);
+    if (serverSocket->socket == INVALID_SOCKET)
+        throw std::exception();
+    serverSocket->sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    serverSocket->sockaddr.sin_family = AF_INET;
+    serverSocket->sockaddr.sin_port = htons(static_cast<u_short>(static_cast<int>(std::get<long long>(ServerConfig::ServerPort.v))));
+    bind(serverSocket->socket, reinterpret_cast<struct sockaddr *>(&serverSocket->sockaddr), sizeof(serverSocket->sockaddr));
 }
 
 ServerCore::~ServerCore()
 {
+    closesocket(serverSocket->socket);
+#if defined (WIN32)
+    WSACleanup();
+#endif
 }
 
 ServerCore &ServerCore::Instance()
@@ -28,11 +44,12 @@ bool ServerCore::config(const zia::api::Conf &conf) {
 }
 
 bool ServerCore::run(zia::api::Net::Callback callback) {
-    for (int i = 0; i < 10; ++i)
+   /* for (int i = 0; i < 10; ++i)
     {
         zia::api::NetInfo netInfo;
         callback(zia::api::Net::Raw(), netInfo);
-    }
+    }*/
+    listen(serverSocket->socket, 32);
     while (true)
     {
         if (threadPool.isEmptyThreadPool())
