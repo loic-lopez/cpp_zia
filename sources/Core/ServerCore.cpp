@@ -63,7 +63,7 @@ bool ServerCore::run(zia::api::Net::Callback callback) {
     }
 
     if (listen(serverSocket->socket, 32) == -1)
-        throw std::exception();
+        throw std::runtime_error("Cannot listen to socket");
 
     while (true)
     {
