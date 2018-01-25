@@ -2,12 +2,14 @@
 
 int main()
 {
-   /* ServerCore::Instance().run([](zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)
+    ServerCore &serverCore = ServerCore::Instance();
+
+    serverCore.config(zia::api::Conf());
+    ServerCore::Instance().run([](zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)
                                {
                                    ThreadPool::Instance().addThread(rawData, netInfo);
-                               });*/
+                               });
 
-    ServerConfig::LoadConfigFromFile();
 
     return 0;
 }

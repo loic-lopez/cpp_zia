@@ -26,7 +26,7 @@ std::mutex &ThreadPool::getLock()
 
 ThreadPool::~ThreadPool()
 {
-    shutdown();
+    activeThreadRemover = false;
 }
 
 void ThreadPool::addThread(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)

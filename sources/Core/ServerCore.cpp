@@ -9,18 +9,14 @@ ServerCore ServerCore::m_instance = ServerCore();
 
 ServerCore::ServerCore() : threadPool(ThreadPool::Instance())
 {
-#if defined (WIN32)
+#ifdef WIN32
     WSADATA WSAData;
     WSAStartup(MAKEWORD(2,2), &WSAData);
 #endif
-    serverSocket = std::shared_ptr<ImplSocket>(new ImplSocket());
+    serverSocket = std::make_shared<ImplSocket>();
     serverSocket->socket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket->socket == INVALID_SOCKET)
-        throw std::exception();
-    serverSocket->sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    serverSocket->sockaddr.sin_family = AF_INET;
-    serverSocket->sockaddr.sin_port = htons(static_cast<u_short>(static_cast<int>(std::get<long long>(ServerConfig::ServerPort.v))));
-    bind(serverSocket->socket, reinterpret_cast<struct sockaddr *>(&serverSocket->sockaddr), sizeof(serverSocket->sockaddr));
+        throw std::runtime_error("Cannot create socket.");
 }
 
 ServerCore::~ServerCore()
@@ -49,7 +45,32 @@ bool ServerCore::run(zia::api::Net::Callback callback) {
         zia::api::NetInfo netInfo;
         callback(zia::api::Net::Raw(), netInfo);
     }*/
-    listen(serverSocket->socket, 32);
+
+#ifdef WIN32
+    char buffer[UNLEN + 1] = {0};
+        DWORD buffer_len = UNLEN + 1;
+        if (!::GetUserNameA(buffer, & buffer_len))
+        {
+            // error handling
+        }
+#else
+    long long port = std::get<long long>(ServerConfig::ServerPort.v);
+    if (getuid() && port == 80 || port == 443)
+        throw std::runtime_error("You must run zia with admin right with requested port : " + std::to_string(port));
+#endif
+
+    struct sockaddr finalAddr = ServerConfig::FormatIPAdress(serverSocket->sockaddr);
+    if (bind(serverSocket->socket, &finalAddr, sizeof(serverSocket->sockaddr)) == -1)
+    {
+        std::string msg = "Cannot bind on address: ";
+        msg += std::get<std::string>(ServerConfig::ServerIP.v) + " with port ";
+        msg += std::to_string(std::get<long long>(ServerConfig::ServerPort.v));
+        throw std::runtime_error(msg);
+    }
+
+    if (listen(serverSocket->socket, 32) == -1)
+        throw std::exception();
+
     while (true)
     {
         if (threadPool.isEmptyThreadPool())
@@ -73,4 +94,3 @@ bool ServerCore::send(zia::api::ImplSocket *sock, const zia::api::Net::Raw &resp
 bool ServerCore::stop() {
     return false;
 }
-
