@@ -9,20 +9,26 @@ ServerCore ServerCore::m_instance = ServerCore();
 
 ServerCore::ServerCore() : threadPool(ThreadPool::Instance())
 {
-    serverSocket = std::make_shared<ImplSocket>();
+#if defined (WIN32)
+    WSADATA WSAData;
+    WSAStartup(MAKEWORD(2,2), &WSAData);
+#endif
+    serverSocket = std::shared_ptr<ImplSocket>(new ImplSocket());
     serverSocket->socket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket->socket == INVALID_SOCKET)
         throw std::exception();
+    serverSocket->sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     serverSocket->sockaddr.sin_family = AF_INET;
-    serverSocket->sockaddr.sin_addr.s_addr = INADDR_ANY;
-    serverSocket->sockaddr.sin_port = htons(
-            static_cast<u_short>(static_cast<int>(std::get<long long>(ServerConfig::ServerPort.v))));
+    serverSocket->sockaddr.sin_port = htons(static_cast<u_short>(static_cast<int>(std::get<long long>(ServerConfig::ServerPort.v))));
     bind(serverSocket->socket, reinterpret_cast<struct sockaddr *>(&serverSocket->sockaddr), sizeof(serverSocket->sockaddr));
 }
 
 ServerCore::~ServerCore()
 {
     closesocket(serverSocket->socket);
+#if defined (WIN32)
+    WSACleanup();
+#endif
 }
 
 ServerCore &ServerCore::Instance()
