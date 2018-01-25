@@ -13,6 +13,7 @@ ServerCore::ServerCore() : threadPool(ThreadPool::Instance())
     WSADATA WSAData;
     WSAStartup(MAKEWORD(2,2), &WSAData);
 #endif
+
     serverSocket = std::make_shared<ImplSocket>();
     serverSocket->socket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket->socket == INVALID_SOCKET)
@@ -46,14 +47,7 @@ bool ServerCore::run(zia::api::Net::Callback callback) {
         callback(zia::api::Net::Raw(), netInfo);
     }*/
 
-#ifdef WIN32
-    char buffer[UNLEN + 1] = {0};
-        DWORD buffer_len = UNLEN + 1;
-        if (!::GetUserNameA(buffer, & buffer_len))
-        {
-            // error handling
-        }
-#else
+#if defined(__APPLE__) || defined(__linux__)
     long long port = std::get<long long>(ServerConfig::ServerPort.v);
     if (getuid() && port == 80 || port == 443)
         throw std::runtime_error("You must run zia with admin right with requested port : " + std::to_string(port));
