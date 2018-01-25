@@ -24,28 +24,27 @@ ThreadPool::~ThreadPool()
 
 void ThreadPool::addThread(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)
 {
-    while (!this->lock.try_lock());
     this->threads.emplace_back(new HttpHandler(std::move(rawData), std::move(netInfo), serverCoreId));
-    lock.unlock();
 }
 
 void ThreadPool::handleRemoveTerminatedThreads()
 {
     while (activeThreadRemover)
     {
-        if (this->lock.try_lock())
+        if (!threads.empty() && this->lock.try_lock())
         {
-            for (auto thread : threads)
+            for (int i = 0; i < threads.size(); ++i)
             {
+                HttpHandler *thread = threads.at(i);
                 if (thread->terminated)
                 {
                     thread->join();
                     this->threads.erase(std::remove(threads.begin(), threads.end(), thread), threads.end());
                     delete thread;
+                    lock.unlock();
                     break;
                 }
             }
-            lock.unlock();
         }
     }
 }
