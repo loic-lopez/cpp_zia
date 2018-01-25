@@ -12,7 +12,7 @@ on the command line passing the header file and class for which you want
 to generate a Google Mock class.
 
 Make sure to install the scripts somewhere in your path.  Then you can
-run the program.
+isRunning the program.
 
   gmock_gen.py header-file.h [ClassName]...
 

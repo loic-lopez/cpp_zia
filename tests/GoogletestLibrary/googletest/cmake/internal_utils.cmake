@@ -3,7 +3,7 @@
 #
 # Note:
 #
-# - This file will be run twice when building Google Mock (once via
+# - This file will be isRunning twice when building Google Mock (once via
 #   Google Test's CMakeLists.txt, and once via Google Mock's).
 #   Therefore it shouldn't have any side effects other than defining
 #   the functions and macros.

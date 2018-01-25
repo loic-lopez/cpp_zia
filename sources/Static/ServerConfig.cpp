@@ -8,10 +8,6 @@
 namespace fs = std::experimental::filesystem;
 namespace Json = nlohmann;
 
-zia::api::ConfValue ServerConfig::ServerIP;
-zia::api::ConfValue ServerConfig::ServerPort;
-zia::api::ConfValue ServerConfig::ConfigPath;
-zia::api::ConfValue ServerConfig::DocumentWebRootPath;
 std::map<ServerCoreId, zia::api::ConfObject> ServerConfig::WebSiteConfs;
 zia::api::ConfObject ServerConfig::ServerConf;
 
@@ -48,16 +44,11 @@ inline void ServerConfig::DefaultConfig()
             zia::api::ConfObject confObject;
 
             confObject["port"] = CreateConfValueFromType(static_cast<long long>(8080));
-            confObject["root"] = CreateConfValueFromType(std::string("/html"));
+            confObject["document_root"] = CreateConfValueFromType(std::string("html/"));
             confObject["server_name"] = CreateConfValueFromType(std::string("localhost"));
             return confObject;
         }();
     }
-
-    ServerIP.v = std::string("127.0.0.1");
-    ServerPort.v = static_cast<long long>(8080);
-    ConfigPath.v = std::string("config/localhost.conf.json");
-    DocumentWebRootPath.v = std::string("html/");
 }
 
 bool ServerConfig::isConfigFileExists(const std::string &path)
@@ -65,13 +56,11 @@ bool ServerConfig::isConfigFileExists(const std::string &path)
     return fs::exists(fs::path(path.c_str()));
 }
 
-struct sockaddr ServerConfig::FormatIPAdress(struct sockaddr_in &addr)
+struct sockaddr ServerConfig::FormatIPAddress(struct sockaddr_in &addr, int port, std::string host)
 {
     struct sockaddr addrRet;
     struct hostent *lphost;
     u_long IP;
-    std::string host = std::get<std::string>(ServerIP.v);
-    int port = std::get<long long>(ServerPort.v);
 
     std::memset((char *) &addr, 0, sizeof(addr));
     if ((IP = inet_addr(host.c_str())) == (u_long) INADDR_NONE)
@@ -111,9 +100,9 @@ zia::api::ConfObject ServerConfig::LoadConfigFromFile(const std::string &path)
         std::string key = it.key();
         zia::api::ConfValue confValue;
         if (key == "port")
-            confValue.v = std::stoll(value);
+            confValue = CreateConfValueFromType(std::stoll(value));
         else
-            confValue.v = value;
+            confValue = CreateConfValueFromType(value);
         confObject[key] = confValue;
     }
 
@@ -124,7 +113,7 @@ zia::api::ConfObject ServerConfig::LoadConfigFromFile(const std::string &path)
         if (confObject.find(requiredKey) == confObject.end())
             throw std::runtime_error("configuration required : " + requiredKey + " in : " + path);
     }
-
+    return confObject;
 }
 
 void ServerConfig::LoadDefaultServerConfig()

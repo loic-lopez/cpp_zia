@@ -37,7 +37,7 @@ Changes for 1.6.0:
 * Colored output works in GNU Screen sessions now.
 * Parameters of value-parameterized tests are now printed in the
   textual output.
-* Failures from ad hoc test assertions run before RUN_ALL_TESTS() are
+* Failures from ad hoc test assertions isRunning before RUN_ALL_TESTS() are
   now correctly reported.
 * Arguments of ASSERT_XY and EXPECT_XY no longer need to support << to
   ostream.
@@ -103,7 +103,7 @@ Changes for 1.3.0:
  * New feature: death tests on Windows, Cygwin, and Mac.
  * New feature: ability to use Google Test assertions in other testing
    frameworks.
- * New feature: ability to run disabled test via
+ * New feature: ability to isRunning disabled test via
    --gtest_also_run_disabled_tests.
  * New feature: the --help flag for printing the usage.
  * New feature: access to Google Test flag values in user code.

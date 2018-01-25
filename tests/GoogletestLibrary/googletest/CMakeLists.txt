@@ -1,9 +1,9 @@
 ########################################################################
 # CMake build script for Google Test.
 #
-# To run the tests for Google Test itself on Linux, use 'make test' or
-# ctest.  You can select which tests to run using 'ctest -R regex'.
-# For more options, run 'ctest --help'.
+# To isRunning the tests for Google Test itself on Linux, use 'make test' or
+# ctest.  You can select which tests to isRunning using 'ctest -R regex'.
+# For more options, isRunning 'ctest --help'.
 
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
 # make it prominent in the GUI.
@@ -140,7 +140,7 @@ endif()
 # or specifying the -Dgtest_build_tests=ON flag when running cmake.
 
 if (gtest_build_tests)
-  # This must be set in the root directory for the tests to be run by
+  # This must be set in the root directory for the tests to be isRunning by
   # 'make test' or ctest.
   enable_testing()
 

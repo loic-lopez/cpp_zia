@@ -94,7 +94,7 @@ EXTRA_DIST += \
   test/production.cc \
   test/production.h
 
-# Python tests that we don't run.
+# Python tests that we don't isRunning.
 EXTRA_DIST += \
   test/gtest_break_on_failure_unittest.py \
   test/gtest_catch_exceptions_test.py \
@@ -220,8 +220,8 @@ lib_libgtest_main_la_LIBADD = lib/libgtest.la
 # these variables isn't terribly obvious, so this is a brief
 # reference:
 #
-# TESTS -- Programs run automatically by "make check"
-# check_PROGRAMS -- Programs built by "make check" but not necessarily run
+# TESTS -- Programs isRunning automatically by "make check"
+# check_PROGRAMS -- Programs built by "make check" but not necessarily isRunning
 
 noinst_LTLIBRARIES = samples/libsamples.la
 

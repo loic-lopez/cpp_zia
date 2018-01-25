@@ -11,10 +11,13 @@
 #include <winsock2.h>
 
 #else
+
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+
 #endif
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -28,20 +31,20 @@ using ServerCoreId = int;
 class ServerConfig
 {
 private:
+    static zia::api::ConfObject ServerConf;
+
     static void DefaultConfig();
+
     static void LoadDefaultServerConfig();
+
     static zia::api::ConfObject LoadConfigFromFile(const std::string &);
+
     static bool isConfigFileExists(const std::string &path);
 
 public:
     static std::map<ServerCoreId, zia::api::ConfObject> WebSiteConfs;
-    static zia::api::ConfObject ServerConf;
-    static zia::api::ConfValue ServerPort;
-    static zia::api::ConfValue ServerIP;
-    static zia::api::ConfValue ConfigPath;
 
-    static zia::api::ConfValue DocumentWebRootPath;
-    static struct sockaddr FormatIPAdress(struct sockaddr_in &addr);
+    static struct sockaddr FormatIPAddress(struct sockaddr_in &addr, int port, std::string host);
 
 };
 

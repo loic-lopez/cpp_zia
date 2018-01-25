@@ -16,13 +16,17 @@ class ServerCore : public zia::api::Net
 private:
     ThreadPool  threadPool;
     std::shared_ptr<zia::api::ImplSocket> serverSocket;
-    std::string  webRootPath;
+    std::string  documentRootPath;
     int          port;
+    std::string serverName;
+    ServerCoreId   serverCoreId;
+    bool            isRunning;
+    std::shared_ptr<std::thread>     serverThread;
 
 
 public:
 
-    ServerCore();
+    ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zia::api::Net::Callback callback);
     ~ServerCore();
 
     bool config(const zia::api::Conf& conf) override;
