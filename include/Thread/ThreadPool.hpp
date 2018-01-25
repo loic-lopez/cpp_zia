@@ -26,7 +26,7 @@ private:
 
 public:
     static ThreadPool& Instance();
-    void addThread(zia::api::Net::Raw, zia::api::NetInfo);
+    void addThread(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo);
     void handleRemoveTerminatedThreads();
     bool isEmptyThreadPool();
     void shutdown();

@@ -8,15 +8,18 @@
 #include <functional>
 #include <thread>
 #include <mutex>
+#include <Core/ImplSocket.hpp>
 
 class HttpHandler : public std::thread
 {
 public:
 
-    explicit HttpHandler();
+    explicit HttpHandler(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo);
     void     run();
 
     bool terminated;
+    zia::api::Net::Raw rawData;
+    zia::api::NetInfo netInfo;
 };
 
 

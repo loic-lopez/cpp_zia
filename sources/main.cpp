@@ -7,7 +7,7 @@ int main()
     serverCore.config(zia::api::Conf());
     ServerCore::Instance().run([](zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)
                                {
-                                   ThreadPool::Instance().addThread(rawData, netInfo);
+                                   ThreadPool::Instance().addThread(std::move(rawData), std::move(netInfo));
                                });
 
 

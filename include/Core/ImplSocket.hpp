@@ -23,13 +23,22 @@
 #define closesocket(s) close(s)
 #endif
 
-struct ImplSocket {
+namespace zia::api
+{
+    struct ImplSocket {
 #ifdef WIN32
-    SOCKET socket;
+        SOCKET socket;
 #else
-    int socket;
+        int socket;
 #endif
-    struct sockaddr_in sockaddr;
-};
+        struct sockaddr_in sockaddr;
 
+        explicit ImplSocket(int socket) : sockaddr({0})
+        {
+            this->socket = socket;
+        };
+        ImplSocket() = default;
+    };
+
+}
 #endif //CPP_ZIA_IMPLSOCKET_HPP

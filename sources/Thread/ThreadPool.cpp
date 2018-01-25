@@ -32,7 +32,7 @@ ThreadPool::~ThreadPool()
 void ThreadPool::addThread(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)
 {
     while (!this->lock.try_lock());
-    this->threads.emplace_back(new HttpHandler());
+    this->threads.emplace_back(new HttpHandler(std::move(rawData), std::move(netInfo)));
     lock.unlock();
 }
 

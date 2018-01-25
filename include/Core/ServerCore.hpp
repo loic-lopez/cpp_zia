@@ -16,7 +16,7 @@ class ServerCore : public  zia::api::Net
 private:
     static ServerCore m_instance;
     ThreadPool  &threadPool;
-    std::shared_ptr<ImplSocket> serverSocket;
+    std::shared_ptr<zia::api::ImplSocket> serverSocket;
     ServerCore& operator= (const ServerCore&){}
     ServerCore (const ServerCore&) : threadPool(ThreadPool::Instance())
     {
