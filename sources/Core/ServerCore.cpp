@@ -5,7 +5,7 @@
 #include <iostream>
 #include <Core/ServerCore.hpp>
 
-ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zia::api::Net::Callback callback)
+ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zia::api::Net::Callback callback) : threadPool(4)
 {
 #ifdef WIN32
     WSADATA WSAData;
@@ -13,7 +13,7 @@ ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zi
 #endif
 
     isRunning = true;
-    this->threadPool.setServerCoreId(serverCoreId);
+    this->serverCoreId = serverCoreId;
     serverSocket = std::make_shared<zia::api::ImplSocket>();
     serverSocket->socket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket->socket == INVALID_SOCKET)
@@ -87,7 +87,6 @@ bool ServerCore::run(zia::api::Net::Callback callback)
 
         }
     }
-    threadPool.shutdown();
     return true;
 }
 
@@ -124,4 +123,9 @@ bool ServerCore::stop()
 ThreadPool &ServerCore::getThreadPool()
 {
     return threadPool;
+}
+
+ServerCoreId ServerCore::getServerCoreId() const
+{
+    return serverCoreId;
 }

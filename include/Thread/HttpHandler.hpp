@@ -10,17 +10,19 @@
 #include <mutex>
 #include <Core/ImplSocket.hpp>
 
-class HttpHandler : public std::thread
+class HttpHandler
 {
-public:
-
-    explicit HttpHandler(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo, ServerCoreId serverCoreId);
-    void     run();
-
-    bool terminated;
+private:
     zia::api::Net::Raw rawData;
     zia::api::NetInfo netInfo;
     ServerCoreId serverCoreId;
+
+public:
+    explicit HttpHandler(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo, ServerCoreId serverCoreId);
+
+    virtual ~HttpHandler();
+
+    void     run();
 };
 
 

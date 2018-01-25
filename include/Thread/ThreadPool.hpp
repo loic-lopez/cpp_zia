@@ -9,28 +9,28 @@
 #include <vector>
 #include <api/net.h>
 #include <Static/ServerConfig.hpp>
+#include <queue>
 #include "HttpHandler.hpp"
 
 class ThreadPool
 {
 private:
-    std::vector<HttpHandler *> threads;
-    std::mutex        lock;
-    bool            activeThreadRemover;
-    std::thread     threadRemover;
+    std::mutex 			lock_;
+    std::condition_variable	condVar_;
+    bool 				shutdown_;
+    std::queue<std::function <void ()>> jobs_;
+    std::vector<std::thread> 	threads_;
     ServerCoreId   serverCoreId;
 
 public:
-    ThreadPool();
+    explicit ThreadPool(int nbThreads);
     ~ThreadPool();
     ThreadPool& operator= (const ThreadPool&){}
-    ThreadPool (const ThreadPool&) : activeThreadRemover(true), threadRemover(&ThreadPool::handleRemoveTerminatedThreads, this){ };
+    ThreadPool (const ThreadPool&) { };
 
-    void addThread(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo);
-    void handleRemoveTerminatedThreads();
-    void shutdown();
-    std::mutex &getLock();
-    void setServerCoreId(ServerCoreId serverCoreId);
+
+    void 				doJob(std::function <void ()> func);
+    void	            threadRun(void);
 
 };
 

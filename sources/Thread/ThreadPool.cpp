@@ -6,56 +6,57 @@
 #include <iostream>
 #include <Core/ServerCore.hpp>
 
-ThreadPool::ThreadPool() : activeThreadRemover(true),
-                           threadRemover(&ThreadPool::handleRemoveTerminatedThreads, this)
+ThreadPool::ThreadPool(int threads) : shutdown_(false)
 {
-}
+    this->threads_.reserve(threads);
 
-std::mutex &ThreadPool::getLock()
-{
-    return lock;
+    for (int i = 0; i < threads; i++)
+        this->threads_.emplace_back(std::bind(&ThreadPool::threadRun, this));
 }
-
 
 ThreadPool::~ThreadPool()
 {
-    activeThreadRemover = false;
-}
-
-void ThreadPool::addThread(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)
-{
-    this->threads.emplace_back(new HttpHandler(std::move(rawData), std::move(netInfo), serverCoreId));
-}
-
-void ThreadPool::handleRemoveTerminatedThreads()
-{
-    while (activeThreadRemover)
     {
-        if (!threads.empty() && this->lock.try_lock())
+        std::unique_lock<std::mutex> lock(this->lock_);
+        this->shutdown_ = true;
+        this->condVar_.notify_all();
+    }
+
+    for (auto& thread : this->threads_)
+        thread.join();
+}
+
+void	ThreadPool::doJob(std::function <void ()> func)
+{
+    std::unique_lock<std::mutex>		lock(lock_);
+
+    this->jobs_.emplace(func);
+    this->condVar_.notify_one();
+}
+
+void	ThreadPool::threadRun()
+{
+    std::function<void ()>	job;
+
+    while (true)
+    {
         {
-            for (int i = 0; i < threads.size(); ++i)
-            {
-                HttpHandler *thread = threads.at(i);
-                if (thread->terminated)
-                {
-                    thread->join();
-                    this->threads.erase(std::remove(threads.begin(), threads.end(), thread), threads.end());
-                    delete thread;
-                    lock.unlock();
-                    break;
-                }
-            }
+            std::unique_lock <std::mutex> lock (this->lock_);
+
+            while (!this->shutdown_ && this->jobs_.empty())
+                this->condVar_.wait(lock);
+
+            if (this->jobs_.empty())
+                return;
+
+            job = std::move(this->jobs_.front());
+            this->jobs_.pop();
+        }
+
+        if (this->lock_.try_lock())
+        {
+            job();
+            this->lock_.unlock();
         }
     }
-}
-
-void ThreadPool::shutdown()
-{
-    activeThreadRemover = false;
-    threadRemover.join();
-}
-
-void ThreadPool::setServerCoreId(ServerCoreId serverCoreId)
-{
-    ThreadPool::serverCoreId = serverCoreId;
 }

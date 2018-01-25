@@ -10,9 +10,7 @@
 HttpHandler::HttpHandler(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo, ServerCoreId serverCoreId) :
         serverCoreId(serverCoreId),
         rawData(std::move(rawData)),
-        netInfo(std::move(netInfo)),
-        terminated(false),
-        thread(&HttpHandler::run, this)
+        netInfo(std::move(netInfo))
 {
 }
 
@@ -22,5 +20,9 @@ void HttpHandler::run()
     std::cerr << "RESPONSE SENT!" << std::endl;
     closesocket(netInfo.sock->socket);
     delete netInfo.sock;
-    terminated = true;
+}
+
+HttpHandler::~HttpHandler()
+{
+
 }

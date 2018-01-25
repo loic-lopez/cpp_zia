@@ -38,6 +38,8 @@ public:
     bool stop() override;
 
     ThreadPool &getThreadPool();
+
+    ServerCoreId getServerCoreId() const;
 };
 
 
