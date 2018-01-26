@@ -23,6 +23,7 @@ public:
 
     virtual void parseHttpFormat(std::string) = 0;
     virtual void treatHttp1_1() = 0;
+    virtual void fillHeaders(std::string) = 0;
     virtual void getBody(size_t) = 0;
 };
 

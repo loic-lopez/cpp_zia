@@ -28,6 +28,8 @@ public:
 
     virtual void                parseHttpFormat(std::string);
     virtual void                treatHttp1_1();
+    virtual void                fillHeaders(std::string);
+    virtual void                getBody();
 };
 
 #endif //CPP_ZIA_ANSPARSER_HPP

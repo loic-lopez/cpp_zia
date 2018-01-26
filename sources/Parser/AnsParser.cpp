@@ -54,4 +54,22 @@ void AnsParser::treatHttp1_1()
     this->response.version = zia::api::http::Version::http_1_1;
     this->response.status = std::stoi(this->dividedResponseWords[1]);
     this->response.reason = this->dividedResponseWords[2];
+    for (const auto &method : this->dividedResponseWords)
+    {
+        if (method.at(method.size() - 1) == ':')
+            fillHeaders(method);
+    }
+}
+
+void AnsParser::fillHeaders(std::string toFind) {
+
+    for (const auto &headers : this->dividedResponseLines)
+    {
+        if (headers.find(toFind) != std::string::npos)
+            this->response.headers.insert({toFind, headers.substr(toFind.size() + 1)});
+    }
+}
+
+void AnsParser::getBody() {
+
 }

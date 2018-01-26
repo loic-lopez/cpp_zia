@@ -61,7 +61,7 @@ void ReqParser::treatHttp1_1()
         if (this->type.find(method) != this->type.end())
             this->request.method = this->type[method];
         if (method.at(method.size() - 1) == ':')
-            fillHearders(method);
+            fillHeaders(method);
     }
     //TODO: a finir récupération du body
 //    size_t i = 0;
@@ -77,7 +77,7 @@ void ReqParser::treatHttp1_1()
 //    }
 }
 
-void ReqParser::fillHearders(std::string toFind)
+void ReqParser::fillHeaders(std::string toFind)
 {
     for (const auto &headers : this->dividedRequestLines)
     {
