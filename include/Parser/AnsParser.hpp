@@ -10,24 +10,24 @@
 #ifndef CPP_ZIA_ANSPARSER_HPP
 #define CPP_ZIA_ANSPARSER_HPP
 
-#include <Enum.hpp>
+#include <vector>
+#include <map>
 #include "IParser.hpp"
+#include "Enum.hpp"
 
 class AnsParser :public IParser
 {
-    int         returnedCode;
-    std::string date;
-    std::string server;
-    std::string contentType;
-    std::string contentLength;
-    std::string expires;
-    std::string lastModif;
+
+    std::vector<std::string>    dividedResponseLines;
+    std::vector<std::string>    dividedResponseWords;
+    zia::api::HttpResponse      response;
 
 public:
     AnsParser();
     ~AnsParser();
 
-    virtual void parseHttpFormat(std::string);
+    virtual void                parseHttpFormat(std::string);
+    virtual void                treatHttp1_1();
 };
 
 #endif //CPP_ZIA_ANSPARSER_HPP

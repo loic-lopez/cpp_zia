@@ -12,7 +12,6 @@
 
 AnsParser::AnsParser()
 {
-
 }
 
 AnsParser::~AnsParser()
@@ -22,5 +21,37 @@ AnsParser::~AnsParser()
 
 void AnsParser::parseHttpFormat(std::string httpAnswer)
 {
+    std::stringstream   line(httpAnswer);
+    std::string         segment;
 
+    while (std::getline(line, segment, '\n'))
+        this->dividedResponseLines.push_back(segment);
+
+    for (const auto &request : dividedResponseLines)
+    {
+        std::stringstream   line(request);
+        while (std::getline(line, segment, ' ')) {
+            std::cout << segment << "   ";
+            this->dividedResponseWords.push_back(segment);
+        }
+        std::cout << std::endl;
+    }
+    for (const auto &word : dividedResponseWords)
+    {
+        if (word.find("HTTP/1.1") != std::string::npos)
+        {
+            this->treatHttp1_1();
+            break;
+        }
+    }
+
+    //TODO : Faire un if qui convertit le dividedResponseWords[1] en int et qui le compare a la valeur de tous les valeurs possibles de l'enum
+    //TODO : Parser le code retour et la raison dans dividedReponseWords et les mettre dans l'objet HttpResponse reponse;
+}
+
+void AnsParser::treatHttp1_1()
+{
+    this->response.version = zia::api::http::Version::http_1_1;
+    this->response.status = std::stoi(this->dividedResponseWords[1]);
+    this->response.reason = this->dividedResponseWords[2];
 }
