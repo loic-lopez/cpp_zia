@@ -30,6 +30,7 @@ public:
     virtual void    parseHttpFormat(std::string);
     virtual void    treatHttp1_1();
     void            fillHearders(std::string);
+    void            getBody(size_t);
 
 };
 

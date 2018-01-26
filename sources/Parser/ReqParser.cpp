@@ -63,7 +63,18 @@ void ReqParser::treatHttp1_1()
         if (method.at(method.size() - 1) == ':')
             fillHearders(method);
     }
-
+    //TODO: a finir récupération du body
+//    size_t i = 0;
+//    for (std::vector<std::string>::iterator it = this->dividedRequestLines.begin(); it < this->dividedRequestLines.end() ; ++it)
+//    {
+//        if ((*it) == "\n")
+//        {
+//            getBody(i);
+//            i++;
+//            break;
+//        }
+//        i++;
+//    }
 }
 
 void ReqParser::fillHearders(std::string toFind)
@@ -73,6 +84,13 @@ void ReqParser::fillHearders(std::string toFind)
         if (headers.find(toFind) != std::string::npos)
         {
             this->request.headers.insert({toFind, headers.substr(toFind.size() + 1)});
+            if (toFind == "Host:")
+                this->request.uri = headers.substr(toFind.size() + 1);
         }
     }
+}
+
+void ReqParser::getBody(size_t i)
+{
+
 }
