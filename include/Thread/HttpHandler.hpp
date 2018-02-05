@@ -9,6 +9,8 @@
 #include <thread>
 #include <mutex>
 #include <Core/ImplSocket.hpp>
+#include <Static/ServerConfig.hpp>
+#include <api/net.h>
 
 class HttpHandler
 {

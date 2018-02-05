@@ -20,8 +20,8 @@ add_subdirectory(GoogletestLibrary)
 include_directories(GoogletestLibrary/googlemock/include)
 
 set(TESTS_SOURCES TestSources/HttpHandlerTest.cpp)
-set(INCLUDE ../include/Thread/HttpHandler.hpp)
-set(SRC ../sources/Thread/HttpHandler.cpp)
+file(GLOB INCLUDE ${PROJECT_SOURCE_DIR}/include/*.hpp ${PROJECT_SOURCE_DIR}/include/*.h)
+file(GLOB INCLUDE ${PROJECT_SOURCE_DIR}/sources/*.cpp)
 
 add_executable(ZiaTests ${SRC} ${INCLUDE} ${TESTS_SOURCES})
 
