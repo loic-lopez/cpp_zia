@@ -5,9 +5,10 @@
 #ifndef CPP_ZIA_SERVERLAUNCHER_HPP
 #define CPP_ZIA_SERVERLAUNCHER_HPP
 
+#include <Handler/SignalHandler.hpp>
 #include "ServerCore.hpp"
 
-class ServerLauncher
+class ServerLauncher : public SignalHandler
 {
 private:
     std::map<unsigned int, std::shared_ptr<zia::api::Net>> servers;
@@ -23,6 +24,7 @@ public:
     void launch();
     zia::api::Net *getServer(ServerCoreId serverCoreId);
     static ServerLauncher& Instance();
+    bool handleSignal(int signal) override ;
 };
 
 

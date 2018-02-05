@@ -3,7 +3,9 @@
 //
 
 #include <iostream>
+#include <sys/types.h>
 #include <Core/ServerCore.hpp>
+#include <fcntl.h>
 
 ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zia::api::Net::Callback callback) : threadPool(4)
 {
@@ -68,6 +70,7 @@ bool ServerCore::run(zia::api::Net::Callback callback)
     int newConnection;
     while (isRunning)
     {
+        // TODO: CHANGE TO NON BLOCKING CONNECTION
         newConnection = accept(serverSocket->socket, nullptr, nullptr);
         if (newConnection != SOCKET_ERROR)
         {
@@ -116,8 +119,8 @@ bool ServerCore::send(zia::api::ImplSocket *sock, const zia::api::Net::Raw &resp
 
 bool ServerCore::stop()
 {
-
     isRunning = false;
+    serverThread->join();
     return true;
 }
 

@@ -22,12 +22,12 @@ endif()
 
 set(SOURCES
         sources/main.cpp
-        sources/Thread/HttpHandler.cpp
-        sources/Static/ServerConfig.cpp sources/Thread/ThreadPool.cpp sources/Core/ServerCore.cpp sources/Core/ServerLauncher.cpp)
+        sources/Handler/HttpHandler.cpp
+        sources/Static/ServerConfig.cpp sources/Thread/ThreadPool.cpp sources/Core/ServerCore.cpp sources/Core/ServerLauncher.cpp sources/Handler/SignalHandler.cpp)
 
 
 set(INCLUDE
-        include/Thread/HttpHandler.hpp
+        include/Handler/HttpHandler.hpp
         include/Static/ServerConfig.hpp
         include/Static/static_constructor.hpp
         include/api/conf.h
@@ -35,7 +35,7 @@ set(INCLUDE
         include/api/module.h
         include/api/net.h
         include/Library/json.hpp
-        include/Core/ServerCore.hpp include/Thread/ThreadPool.hpp include/Core/ImplSocket.hpp include/Core/ServerLauncher.hpp include/Library/ScanDir.hpp)
+        include/Core/ServerCore.hpp include/Thread/ThreadPool.hpp include/Core/ImplSocket.hpp include/Core/ServerLauncher.hpp include/Library/ScanDir.hpp include/Handler/SignalHandler.hpp)
 
 
 include_directories(include)

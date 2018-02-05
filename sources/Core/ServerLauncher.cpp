@@ -12,7 +12,7 @@ ServerLauncher &ServerLauncher::Instance()
     return m_instance;
 }
 
-ServerLauncher::ServerLauncher()
+ServerLauncher::ServerLauncher() : SignalHandler(SignalHandler::SIG_INT)
 {
 
 }
@@ -43,5 +43,13 @@ void ServerLauncher::launch()
 zia::api::Net *ServerLauncher::getServer(ServerCoreId serverCoreId)
 {
     return this->servers.at(serverCoreId).get();
+}
+
+bool ServerLauncher::handleSignal(int signal)
+{
+    for(auto &server : servers )
+    {
+        server.second->stop();
+    }
 }
 

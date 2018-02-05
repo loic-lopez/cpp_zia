@@ -3,7 +3,7 @@
 //
 
 #include <gmock/gmock.h>
-#include <Thread/HttpHandler.hpp>
+#include <Handler/HttpHandler.hpp>
 
 TEST(HttpHandlerTest, ShouldSucceed)
 {
