@@ -27,15 +27,8 @@ add_subdirectory(GoogletestLibrary)
 include_directories(GoogletestLibrary/googlemock/include)
 
 set(TESTS_SOURCES TestSources/HttpHandlerTest.cpp TestSources/ServerConfigTest.cpp)
-SET(COVERAGE_SOURCES ${SRC} ${SOURCES} ${INCLUDES} ${TESTS_SOURCES})
 
-SETUP_TARGET_FOR_COVERAGE(ZiaTests_coverage ZiaTests html_zia_coverage
-        # Name for custom target.
-        #				test_driver         # Name of the test driver executable that runs the tests.
-        #									# NOTE! This should always have a ZERO as exit code
-        #									# otherwise the coverage generation will not complete.
-        #				coverage            # Name of output directory.
-        )
+SETUP_TARGET_FOR_COVERAGE(ZiaTests_coverage ZiaTests html_zia_coverage)
 
 add_executable(ZiaTests ${SRC} ${SOURCES} ${INCLUDES} ${TESTS_SOURCES})
 
