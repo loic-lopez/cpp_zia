@@ -15,6 +15,5 @@ TEST(ServerConfigTest, WebSiteConfs)
 TEST(ServerConfigTest, isConfigFileExists)
 {
     ASSERT_FALSE(ServerConfig::isConfigFileExists("unittests"));
-
-    //ASSERT_TRUE(ServerConfig::isConfigFileExists("GoogletestLibrary"));
+    ASSERT_TRUE(ServerConfig::isConfigFileExists("CMakeFiles"));
 }
