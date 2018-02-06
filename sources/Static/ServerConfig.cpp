@@ -5,6 +5,8 @@
 #include <experimental/filesystem>
 #include <Static/ServerConfig.hpp>
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "TemplateArgumentsIssues"
 namespace fs = std::experimental::filesystem;
 namespace Json = nlohmann;
 
@@ -28,27 +30,20 @@ inline void ServerConfig::DefaultConfig()
 {
     (void) static_constructor<&ServerConfig::DefaultConfig>::c;
     ServerCoreId serverCoreId = 0;
-    LoadDefaultServerConfig();
 
+    ServerConfig::LoadDefaultServerConfig();
     std::string websitesPath = std::get<std::string>(ServerConf["websites_conf_dir"].v);
 
-    for (const auto &name : scandirpp::get_names(websitesPath))
-    {
-        if (fileEndsWith(name, ".json"))
-            WebSiteConfs[serverCoreId++] = LoadConfigFromFile(websitesPath + '/' + name);
-    }
+    if (fs::exists(fs::path(websitesPath.c_str())))
+        for (const auto &name : scandirpp::get_names(websitesPath))
+        {
+            if (fileEndsWith(name, ".json"))
+                WebSiteConfs[serverCoreId++] = LoadConfigFromFile(websitesPath.append("/") + name);
+        }
 
     if (WebSiteConfs.empty())
     {
-        WebSiteConfs[0] = []() -> zia::api::ConfObject
-        {
-            zia::api::ConfObject confObject;
-
-            confObject["port"] = CreateConfValueFromType(static_cast<long long>(8080));
-            confObject["document_root"] = CreateConfValueFromType(std::string("html/"));
-            confObject["server_name"] = CreateConfValueFromType(std::string("localhost"));
-            return confObject;
-        }();
+        ServerConfig::LoadDefaultWebSiteConf();
     }
 }
 
@@ -89,7 +84,7 @@ struct sockaddr ServerConfig::FormatIPAddress(struct sockaddr_in &addr, int port
     return addrRet;
 }
 
-zia::api::ConfObject ServerConfig::LoadConfigFromFile(const std::string &path)
+inline zia::api::ConfObject ServerConfig::LoadConfigFromFile(const std::string &path)
 {
     Json::json json;
     std::ifstream configFile(fs::path(path.c_str()));
@@ -118,7 +113,7 @@ zia::api::ConfObject ServerConfig::LoadConfigFromFile(const std::string &path)
     return confObject;
 }
 
-void ServerConfig::LoadDefaultServerConfig()
+inline void ServerConfig::LoadDefaultServerConfig()
 {
     if (isConfigFileExists("config/server.conf.json"))
     {
@@ -139,3 +134,18 @@ void ServerConfig::LoadDefaultServerConfig()
         ServerConf["websites_conf_dir"] = CreateConfValueFromType(std::string("config/websites.conf.json.d"));
     }
 }
+
+inline void ServerConfig::LoadDefaultWebSiteConf()
+{
+    WebSiteConfs[0] = []() -> zia::api::ConfObject
+    {
+        zia::api::ConfObject confObject;
+
+        confObject["port"] = CreateConfValueFromType(static_cast<long long>(8080));
+        confObject["document_root"] = CreateConfValueFromType(std::string("html/"));
+        confObject["server_name"] = CreateConfValueFromType(std::string("localhost"));
+        return confObject;
+    }();
+}
+
+#pragma clang diagnostic pop

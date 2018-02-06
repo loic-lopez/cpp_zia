@@ -30,12 +30,19 @@ using ServerCoreId = int;
 
 class ServerConfig
 {
-private:
+#ifndef UNIT_TEST
+    private:
+#else
+    public:
+#endif
+
     static zia::api::ConfObject ServerConf;
 
     static void DefaultConfig();
 
     static void LoadDefaultServerConfig();
+
+    static void LoadDefaultWebSiteConf();
 
     static zia::api::ConfObject LoadConfigFromFile(const std::string &);
 

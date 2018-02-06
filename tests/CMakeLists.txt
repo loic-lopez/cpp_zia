@@ -1,11 +1,11 @@
 project(ZiaTests)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/tests/externals/CMake-codecov/cmake" ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/tests/externals/" ${CMAKE_MODULE_PATH})
 
-SET(ENABLE_COVERAGE On)
-list(APPEND LCOV_REMOVE_PATTERNS "'tests'")
+include(CodeCoverage)
+APPEND_COVERAGE_COMPILER_FLAGS()
 
-find_package(codecov)
+set(COVERAGE_EXCLUDES '${CMAKE_SOURCE_DIR}/tests')
 
 #### PERSONAL INCLUDE
 include_directories(../include)
@@ -26,12 +26,17 @@ endif (MSVC)
 add_subdirectory(GoogletestLibrary)
 include_directories(GoogletestLibrary/googlemock/include)
 
+set(TESTS_SOURCES TestSources/HttpHandlerTest.cpp TestSources/ServerConfigTest.cpp)
+SET(COVERAGE_SOURCES ${SRC} ${SOURCES} ${INCLUDES} ${TESTS_SOURCES})
 
-set(TESTS_SOURCES TestSources/HttpHandlerTest.cpp)
+SETUP_TARGET_FOR_COVERAGE(ZiaTests_coverage ZiaTests html_zia_coverage
+        # Name for custom target.
+        #				test_driver         # Name of the test driver executable that runs the tests.
+        #									# NOTE! This should always have a ZERO as exit code
+        #									# otherwise the coverage generation will not complete.
+        #				coverage            # Name of output directory.
+        )
 
-coverage_evaluate()
-add_executable(ZiaTests ${SRC} ${SOURCES} ${INCLUDES})
-
-add_coverage(ZiaTests)
+add_executable(ZiaTests ${SRC} ${SOURCES} ${INCLUDES} ${TESTS_SOURCES})
 
 target_link_libraries(ZiaTests gtest_main)
