@@ -1,5 +1,12 @@
 project(ZiaTests)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/tests/externals/CMake-codecov/cmake" ${CMAKE_MODULE_PATH})
+
+SET(ENABLE_COVERAGE On)
+list(APPEND LCOV_REMOVE_PATTERNS "'tests'")
+
+find_package(codecov)
+
 #### PERSONAL INCLUDE
 include_directories(../include)
 
@@ -19,10 +26,12 @@ endif (MSVC)
 add_subdirectory(GoogletestLibrary)
 include_directories(GoogletestLibrary/googlemock/include)
 
-set(TESTS_SOURCES TestSources/HttpHandlerTest.cpp)
-file(GLOB INCLUDE ${PROJECT_SOURCE_DIR}/include/*.hpp ${PROJECT_SOURCE_DIR}/include/*.h)
-file(GLOB INCLUDE ${PROJECT_SOURCE_DIR}/sources/*.cpp)
 
-add_executable(ZiaTests ${SRC} ${INCLUDE} ${TESTS_SOURCES})
+set(TESTS_SOURCES TestSources/HttpHandlerTest.cpp)
+
+coverage_evaluate()
+add_executable(ZiaTests ${SRC} ${SOURCES} ${INCLUDES})
+
+add_coverage(ZiaTests)
 
 target_link_libraries(ZiaTests gtest_main)
