@@ -52,36 +52,18 @@ bool ServerConfig::isConfigFileExists(const std::string &path)
     return fs::exists(fs::path(path.c_str()));
 }
 
-struct sockaddr ServerConfig::FormatIPAddress(struct sockaddr_in &addr, int port, std::string host)
+void  ServerConfig::FormatIPAddress(sockaddr_in &addr, int port, std::string host)
 {
-    struct sockaddr addrRet;
-    struct hostent *lphost;
-    u_long IP;
 
-    std::memset((char *) &addr, 0, sizeof(addr));
-    if ((IP = inet_addr(host.c_str())) == (u_long) INADDR_NONE)
-    {
-        if ((lphost = gethostbyname(host.c_str())) == nullptr)
-        {
-            std::memset((char *) &addrRet, 0, sizeof(addrRet));
-            return addrRet;
-        }
-        addr.sin_family = lphost->h_addrtype;
-#ifdef _WIN16
-        _fmemcpy (&addr.sin_addr, lphost->h_addr, lphost->h_length);
-#else
-        std::memcpy(&addr.sin_addr, lphost->h_addr, lphost->h_length);
-#endif
-    }
-    else
-    {
-        addr.sin_family = AF_INET;
-        addr.sin_addr.s_addr = IP;
-    }
-    addr.sin_port = htons((u_short) port);
+    hostent *record = gethostbyname(host.c_str());
+    if(record == nullptr)
+        return;
 
-    std::memcpy((char *) &addrRet, (char *) &addr, sizeof(addrRet));
-    return addrRet;
+    memcpy(&addr.sin_addr, record->h_addr_list[0], record->h_length);
+
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = INADDR_ANY;
+    addr.sin_port = htons(port);
 }
 
 inline zia::api::ConfObject ServerConfig::LoadConfigFromFile(const std::string &path)

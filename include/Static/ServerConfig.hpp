@@ -51,7 +51,7 @@ class ServerConfig
 public:
     static std::map<ServerCoreId, zia::api::ConfObject> WebSiteConfs;
 
-    static struct sockaddr FormatIPAddress(struct sockaddr_in &addr, int port, std::string host);
+    static void FormatIPAddress(sockaddr_in &addr, int port, std::string host);
 
 };
 

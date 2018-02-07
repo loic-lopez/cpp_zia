@@ -8,7 +8,8 @@
 #include <fcntl.h>
 #include <api/http.h>
 
-ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zia::api::Net::Callback callback) : threadPool(4)
+ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zia::api::Net::Callback callback)
+        : threadPool(4)
 {
 #ifdef WIN32
     WSADATA WSAData;
@@ -63,7 +64,8 @@ bool ServerCore::run(zia::api::Net::Callback callback)
 #endif
 
     ServerConfig::FormatIPAddress(serverSocket->sockaddr, this->port, this->serverName);
-    if (bind(serverSocket->socket, reinterpret_cast<const sockaddr *>(&serverSocket->sockaddr), sizeof(serverSocket->sockaddr)) == SOCKET_ERROR)
+    if (bind(serverSocket->socket, reinterpret_cast<const sockaddr *>(&serverSocket->sockaddr),
+             sizeof(serverSocket->sockaddr)) == SOCKET_ERROR)
     {
         std::string msg = "Cannot bind on address: ";
         msg += this->serverName + " with port ";
@@ -84,7 +86,9 @@ bool ServerCore::run(zia::api::Net::Callback callback)
         {
             if (FD_ISSET(serverSocket->socket, &readfds))
             {
-                newConnection = accept(serverSocket->socket, reinterpret_cast<sockaddr *>(&serverSocket->sockaddr), (socklen_t*)&addrlen);
+                std::cout << "COUCOU2" << std::endl;
+                newConnection = accept(serverSocket->socket, reinterpret_cast<sockaddr *>(&serverSocket->sockaddr),
+                                       (socklen_t *) &addrlen);
                 if (newConnection != SOCKET_ERROR)
                 {
                     std::cout << "accept incomming connection" << std::endl;
