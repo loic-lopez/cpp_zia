@@ -14,32 +14,41 @@
 class ServerCore : public zia::api::Net
 {
 private:
-    ThreadPool  threadPool;
+    ThreadPool threadPool;
     std::shared_ptr<zia::api::ImplSocket> serverSocket;
-    std::string  documentRootPath;
-    int          port;
+    std::string documentRootPath;
+
+    int port;
     std::string serverName;
-    ServerCoreId   serverCoreId;
-    bool            isRunning;
-    std::shared_ptr<std::thread>     serverThread;
+    ServerCoreId serverCoreId;
+    bool isRunning;
+    std::shared_ptr<std::thread> serverThread;
+
+    int max_sd;
+    fd_set readfds;
+    struct timeval timeout;
+
+    void reset_fds();
 
 
 public:
 
     ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zia::api::Net::Callback callback);
+
     ~ServerCore();
 
-    bool config(const zia::api::Conf& conf) override;
+    bool config(const zia::api::Conf &conf) override;
 
     bool run(Callback cb) override;
 
-    bool send(zia::api::ImplSocket* sock, const Raw& resp) override;
+    bool send(zia::api::ImplSocket *sock, const Raw &resp) override;
 
     bool stop() override;
 
     ThreadPool &getThreadPool();
 
     ServerCoreId getServerCoreId() const;
+
 };
 
 

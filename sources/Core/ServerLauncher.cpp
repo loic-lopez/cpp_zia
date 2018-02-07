@@ -12,7 +12,7 @@ ServerLauncher &ServerLauncher::Instance()
     return m_instance;
 }
 
-ServerLauncher::ServerLauncher() : SignalHandler(SignalHandler::SIG_INT)
+ServerLauncher::ServerLauncher() : SignalHandler(SignalHandler::DEFAULT_SIGNALS)
 {
 
 }
@@ -37,7 +37,7 @@ void ServerLauncher::launch()
         this->servers[conf.first] = std::shared_ptr<zia::api::Net>(server);
     }
 
-    while (true);
+    while (!servers.empty());
 }
 
 zia::api::Net *ServerLauncher::getServer(ServerCoreId serverCoreId)
@@ -47,9 +47,10 @@ zia::api::Net *ServerLauncher::getServer(ServerCoreId serverCoreId)
 
 bool ServerLauncher::handleSignal(int signal)
 {
-    for(auto &server : servers )
+    for(auto &server : servers)
     {
         server.second->stop();
+        servers.erase(server.first);
     }
 }
 

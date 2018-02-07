@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <Core/ServerCore.hpp>
 #include <fcntl.h>
+#include <api/http.h>
 
 ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zia::api::Net::Callback callback) : threadPool(4)
 {
@@ -20,7 +21,8 @@ ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zi
     serverSocket->socket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket->socket == INVALID_SOCKET)
         throw std::runtime_error("Cannot create socket.");
-    config(conf);
+    this->config(conf);
+
     this->serverThread = std::make_shared<std::thread>([&]()
                                                        {
                                                            this->run(callback);
@@ -29,7 +31,8 @@ ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zi
 
 ServerCore::~ServerCore()
 {
-    serverThread->join();
+    if (serverThread->joinable())
+        serverThread->join();
     closesocket(serverSocket->socket);
 #if defined (WIN32)
     WSACleanup();
@@ -71,24 +74,31 @@ bool ServerCore::run(zia::api::Net::Callback callback)
     while (isRunning)
     {
         // TODO: CHANGE TO NON BLOCKING CONNECTION
-        newConnection = accept(serverSocket->socket, nullptr, nullptr);
-        if (newConnection != SOCKET_ERROR)
+        this->reset_fds();
+        if (select(max_sd + 1, &readfds, nullptr, nullptr, &timeout) > -1)
         {
-            std::cout << "accept incomming connection" << std::endl;
-            zia::api::Net::Raw rawData;
-            char Temp[10000] = {'\0'};
-            if (recv(newConnection, Temp, sizeof(Temp), 0) != SOCKET_ERROR)
+            if (FD_ISSET(serverSocket->socket, &readfds))
             {
-                for (int j = 0; Temp[j] != 0; ++j)
-                    rawData.push_back(std::byte(Temp[j]));
+                int addrlen = sizeof(finalAddr);
+                newConnection = accept(serverSocket->socket, &finalAddr,  (socklen_t*)&addrlen);
+                if (newConnection != SOCKET_ERROR)
+                {
+                    std::cout << "accept incomming connection" << std::endl;
+                    zia::api::Net::Raw rawData;
+                    char Temp[sizeof(zia::api::HttpRequest)] = {'\0'};
+                    if (recv(newConnection, Temp, sizeof(Temp), 0) != SOCKET_ERROR)
+                    {
+                        for (int j = 0; Temp[j] != 0; ++j)
+                            rawData.push_back(std::byte(Temp[j]));
 
-                zia::api::NetInfo netInfo;
-                netInfo.sock = new zia::api::ImplSocket(newConnection);
-                netInfo.time = std::chrono::system_clock::now();
-                netInfo.start = std::chrono::steady_clock::now();
-                callback(rawData, netInfo);
+                        zia::api::NetInfo netInfo;
+                        netInfo.sock = new zia::api::ImplSocket(newConnection);
+                        netInfo.time = std::chrono::system_clock::now();
+                        netInfo.start = std::chrono::steady_clock::now();
+                        callback(rawData, netInfo);
+                    }
+                }
             }
-
         }
     }
     return true;
@@ -120,7 +130,6 @@ bool ServerCore::send(zia::api::ImplSocket *sock, const zia::api::Net::Raw &resp
 bool ServerCore::stop()
 {
     isRunning = false;
-    serverThread->join();
     return true;
 }
 
@@ -132,4 +141,13 @@ ThreadPool &ServerCore::getThreadPool()
 ServerCoreId ServerCore::getServerCoreId() const
 {
     return serverCoreId;
+}
+
+void ServerCore::reset_fds()
+{
+    FD_ZERO(&readfds);
+    FD_SET(serverSocket->socket, &readfds);
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 1;
+    max_sd = serverSocket->socket;
 }
