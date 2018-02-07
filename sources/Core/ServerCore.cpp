@@ -62,8 +62,8 @@ bool ServerCore::run(zia::api::Net::Callback callback)
                 "You must isRunning zia with admin right with requested port : " + std::to_string(port));
 #endif
 
-    struct sockaddr finalAddr = ServerConfig::FormatIPAddress(serverSocket->sockaddr, this->port, this->serverName);
-    if (bind(serverSocket->socket, &finalAddr, sizeof(serverSocket->sockaddr)) == SOCKET_ERROR)
+    ServerConfig::FormatIPAddress(serverSocket->sockaddr, this->port, this->serverName);
+    if (bind(serverSocket->socket, reinterpret_cast<const sockaddr *>(&serverSocket->sockaddr), sizeof(serverSocket->sockaddr)) == SOCKET_ERROR)
     {
         std::string msg = "Cannot bind on address: ";
         msg += this->serverName + " with port ";
@@ -75,6 +75,7 @@ bool ServerCore::run(zia::api::Net::Callback callback)
         throw std::runtime_error("Cannot listen to socket");
 
     int newConnection;
+    int addrlen = sizeof(serverSocket->sockaddr);
     while (isRunning)
     {
         // TODO: CHANGE TO NON BLOCKING CONNECTION
@@ -83,8 +84,7 @@ bool ServerCore::run(zia::api::Net::Callback callback)
         {
             if (FD_ISSET(serverSocket->socket, &readfds))
             {
-                int addrlen = sizeof(finalAddr);
-                newConnection = accept(serverSocket->socket, &finalAddr,  (socklen_t*)&addrlen);
+                newConnection = accept(serverSocket->socket, reinterpret_cast<sockaddr *>(&serverSocket->sockaddr), (socklen_t*)&addrlen);
                 if (newConnection != SOCKET_ERROR)
                 {
                     std::cout << "accept incomming connection" << std::endl;
@@ -122,13 +122,13 @@ bool ServerCore::send(zia::api::ImplSocket *sock, const zia::api::Net::Raw &resp
             std::string("Date: ") + std::string(std::ctime(&t)) +
             std::string("Server: Zia\r\n") +
             std::string("Content-Length: ") + std::to_string(content.size()) + "\r\n" +
-            std::string("Content-Type: text/html\r\n") +
-            std::string("Connection: Close\r\n") + "\r\n";
+            std::string("Content-Type: text/html\r\n") + "\r\n";
+
 
     ::send(sock->socket, header.c_str(), header.size(), 0);
     ::send(sock->socket, content.c_str(), content.size(), 0);
 
-    return false;
+    return true;
 }
 
 bool ServerCore::stop()
