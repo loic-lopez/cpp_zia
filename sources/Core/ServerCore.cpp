@@ -21,6 +21,10 @@ ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zi
     serverSocket->socket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket->socket == INVALID_SOCKET)
         throw std::runtime_error("Cannot create socket.");
+
+    int opt = 1;
+    setsockopt(serverSocket->socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int));
+
     this->config(conf);
 
     this->serverThread = std::make_shared<std::thread>([&]()
