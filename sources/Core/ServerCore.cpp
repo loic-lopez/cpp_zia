@@ -102,7 +102,8 @@ bool ServerCore::run(zia::api::Net::Callback callback)
                         netInfo.sock = new zia::api::ImplSocket(newConnection);
                         netInfo.time = std::chrono::system_clock::now();
                         netInfo.start = std::chrono::steady_clock::now();
-                        callback(rawData, netInfo);
+                        HttpHandler(rawData, netInfo, serverCoreId).run();
+                        //callback(rawData, netInfo);
                     }
                 }
             }
@@ -122,7 +123,6 @@ bool ServerCore::send(zia::api::ImplSocket *sock, const zia::api::Net::Raw &resp
     std::time_t t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     std::string header =
             std::string("HTTP/1.1 200 OK\r\n") +
-            std::string("Date: ") + std::string(std::ctime(&t)) +
             std::string("Server: Zia\r\n") +
             std::string("Content-Length: ") + std::to_string(content.size()) + "\r\n" +
             std::string("Content-Type: text/html\r\n") + "\r\n" + content;
