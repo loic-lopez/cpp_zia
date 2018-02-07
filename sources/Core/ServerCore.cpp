@@ -86,7 +86,6 @@ bool ServerCore::run(zia::api::Net::Callback callback)
         {
             if (FD_ISSET(serverSocket->socket, &readfds))
             {
-                std::cout << "COUCOU2" << std::endl;
                 newConnection = accept(serverSocket->socket, reinterpret_cast<sockaddr *>(&serverSocket->sockaddr),
                                        (socklen_t *) &addrlen);
                 if (newConnection != SOCKET_ERROR)
@@ -126,11 +125,10 @@ bool ServerCore::send(zia::api::ImplSocket *sock, const zia::api::Net::Raw &resp
             std::string("Date: ") + std::string(std::ctime(&t)) +
             std::string("Server: Zia\r\n") +
             std::string("Content-Length: ") + std::to_string(content.size()) + "\r\n" +
-            std::string("Content-Type: text/html\r\n") + "\r\n";
+            std::string("Content-Type: text/html\r\n") + "\r\n" + content;
 
 
     ::send(sock->socket, header.c_str(), header.size(), 0);
-    ::send(sock->socket, content.c_str(), content.size(), 0);
 
     return true;
 }
@@ -156,6 +154,6 @@ void ServerCore::reset_fds()
     FD_ZERO(&readfds);
     FD_SET(serverSocket->socket, &readfds);
     timeout.tv_sec = 0;
-    timeout.tv_usec = 1;
+    timeout.tv_usec = 100000;
     max_sd = serverSocket->socket;
 }
