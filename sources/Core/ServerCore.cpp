@@ -102,8 +102,7 @@ bool ServerCore::run(zia::api::Net::Callback callback)
                         netInfo.sock = new zia::api::ImplSocket(newConnection);
                         netInfo.time = std::chrono::system_clock::now();
                         netInfo.start = std::chrono::steady_clock::now();
-                        HttpHandler(rawData, netInfo, serverCoreId).run();
-                        //callback(rawData, netInfo);
+                        callback(rawData, netInfo);
                     }
                 }
             }
