@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <api/http.h>
 
+
 ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zia::api::Net::Callback callback)
         : threadPool(4)
 {
@@ -24,7 +25,7 @@ ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zi
         throw std::runtime_error("Cannot create socket.");
 
     int opt = 1;
-    setsockopt(serverSocket->socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int));
+    setsockopt(serverSocket->socket, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<const char *>(&opt), sizeof(int));
 
     this->config(conf);
 
@@ -124,11 +125,11 @@ bool ServerCore::send(zia::api::ImplSocket *sock, const zia::api::Net::Raw &resp
             std::string("HTTP/1.1 200 OK\r\n") +
             std::string("Server: Zia\r\n") +
             std::string("Content-Length: ") + std::to_string(content.size()) + "\r\n" +
-            std::string("Content-Type: text/html\r\n") + "\r\n" + content;
+            std::string("Content-Type: text/html\r\n") +
+            std::string("Connection: close\r\n") + "\r\n" + content;
 
 
     ::send(sock->socket, header.c_str(), header.size(), 0);
-
     return true;
 }
 

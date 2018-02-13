@@ -8,7 +8,7 @@
 #include <Handler/SignalHandler.hpp>
 #include "ServerCore.hpp"
 
-class ServerLauncher : public SignalHandler
+class ServerLauncher
 {
 private:
     std::map<unsigned int, std::shared_ptr<zia::api::Net>> servers;
@@ -24,7 +24,7 @@ public:
     void launch();
     zia::api::Net *getServer(ServerCoreId serverCoreId);
     static ServerLauncher& Instance();
-    bool handleSignal(int signal) override ;
+    bool handleSignal(int signal);
 };
 
 

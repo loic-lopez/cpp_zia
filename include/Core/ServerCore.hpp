@@ -10,6 +10,9 @@
 #include <api/net.h>
 #include <memory>
 #include "ImplSocket.hpp"
+#ifdef WIN32
+#include <ws2tcpip.h>
+#endif
 
 class ServerCore : public zia::api::Net
 {

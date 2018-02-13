@@ -18,6 +18,11 @@ void HttpHandler::run()
 {
     ServerLauncher::Instance().getServer(serverCoreId)->send(netInfo.sock, zia::api::Net::Raw());
     std::cerr << "RESPONSE SENT!" << std::endl;
+#ifdef WIN32
+    Sleep(1);
+#else
+    sleep(1);
+#endif
     closesocket(netInfo.sock->socket);
     delete netInfo.sock;
 }
