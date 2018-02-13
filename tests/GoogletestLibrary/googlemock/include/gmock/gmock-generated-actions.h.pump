@@ -342,7 +342,7 @@ $range j2 2..i
 // use the action a lot.  While these approaches require more work,
 // they give you more control on the types of the mock function
 // arguments and the action parameters, which in general leads to
-// better compiler error messages that pay off in the long run.  They
+// better compiler error messages that pay off in the long isRunning.  They
 // also allow overloading actions based on parameter types (as opposed
 // to just based on the number of parameters).
 //

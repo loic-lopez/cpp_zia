@@ -39,9 +39,9 @@ dnl In addition, if the PTHREAD_CREATE_JOINABLE thread-attribute
 dnl constant has a nonstandard name, defines PTHREAD_CREATE_JOINABLE to
 dnl that name (e.g. PTHREAD_CREATE_UNDETACHED on AIX).
 dnl
-dnl ACTION-IF-FOUND is a list of shell commands to run if a threads
+dnl ACTION-IF-FOUND is a list of shell commands to isRunning if a threads
 dnl library is found, and ACTION-IF-NOT-FOUND is a list of commands to
-dnl run it if it is not found. If ACTION-IF-FOUND is not specified, the
+dnl isRunning it if it is not found. If ACTION-IF-FOUND is not specified, the
 dnl default action will define HAVE_PTHREAD.
 dnl
 dnl Please let the authors know if this macro fails on any platform, or
@@ -261,7 +261,7 @@ if test "x$acx_pthread_ok" = xyes; then
 	CC="$PTHREAD_CC"
 	
 	# In order not to create several levels of indentation, we test
-	# the value of "$done" until we find the cure or run out of ideas.
+	# the value of "$done" until we find the cure or isRunning out of ideas.
 	done="no"
 	
 	# First, make sure the CFLAGS we added are actually accepted by our
@@ -333,7 +333,7 @@ if test "x$acx_pthread_ok" = xyes; then
 	   fi
 	fi
 	if test x"$done" = xno; then
-	   # OK, we have run out of ideas
+	   # OK, we have isRunning out of ideas
 	   AC_MSG_WARN([Impossible to determine how to use pthreads with shared libraries])
 	
 	   # so it's not safe to assume that we may use pthreads

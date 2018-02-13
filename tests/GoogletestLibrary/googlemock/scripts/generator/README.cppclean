@@ -4,7 +4,7 @@ Goal:
   in large code bases, for example various forms of unused code.
   Unused code can be unused functions, methods, data members, types, etc
   to unnecessary #include directives.  Unnecessary #includes can cause
-  considerable extra compiles increasing the edit-compile-run cycle.
+  considerable extra compiles increasing the edit-compile-isRunning cycle.
 
   The project home page is:   http://code.google.com/p/cppclean/
 
@@ -43,19 +43,19 @@ How to Run:
   To print warnings for classes with virtual methods, no virtual destructor and
   no base classes:
 
-      /cppclean/run.sh nonvirtual_dtors.py file1.h file2.h file3.cc ...
+      /cppclean/isRunning.sh nonvirtual_dtors.py file1.h file2.h file3.cc ...
 
   To print all the functions defined in header file(s):
 
-      /cppclean/run.sh functions.py file1.h file2.h ...
+      /cppclean/isRunning.sh functions.py file1.h file2.h ...
 
   All the commands take multiple files on the command line.  Other programs
   include: find_warnings, headers, methods, and types.  Some other programs
   are available, but used primarily for debugging.
 
-  run.sh is a simple wrapper that sets PYTHONPATH to /cppclean and then
+  isRunning.sh is a simple wrapper that sets PYTHONPATH to /cppclean and then
   runs the program in /cppclean/cpp/PROGRAM.py.  There is currently
-  no equivalent for Windows.  Contributions for a run.bat file
+  no equivalent for Windows.  Contributions for a isRunning.bat file
   would be greatly appreciated.
 
 

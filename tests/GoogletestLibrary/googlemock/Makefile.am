@@ -53,8 +53,8 @@ lib_libgmock_main_la_LIBADD = lib/libgmock.la
 # Build rules for tests. Automake's naming for some of these variables isn't
 # terribly obvious, so this is a brief reference:
 #
-# TESTS -- Programs run automatically by "make check"
-# check_PROGRAMS -- Programs built by "make check" but not necessarily run
+# TESTS -- Programs isRunning automatically by "make check"
+# check_PROGRAMS -- Programs built by "make check" but not necessarily isRunning
 
 TESTS=
 check_PROGRAMS=
@@ -117,7 +117,7 @@ EXTRA_DIST += \
   test/gmock-port_test.cc \
   test/gmock_stress_test.cc
 
-# Python tests, which we don't run using autotools.
+# Python tests, which we don't isRunning using autotools.
 EXTRA_DIST += \
   test/gmock_leak_test.py \
   test/gmock_leak_test_.cc \

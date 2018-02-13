@@ -1,5 +1,12 @@
 project(ZiaTests)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/tests/externals/" ${CMAKE_MODULE_PATH})
+
+include(CodeCoverage)
+APPEND_COVERAGE_COMPILER_FLAGS()
+
+set(COVERAGE_EXCLUDES '${CMAKE_SOURCE_DIR}/tests')
+
 #### PERSONAL INCLUDE
 include_directories(../include)
 
@@ -19,10 +26,10 @@ endif (MSVC)
 add_subdirectory(GoogletestLibrary)
 include_directories(GoogletestLibrary/googlemock/include)
 
-set(TESTS_SOURCES TestSources/HttpHandlerTest.cpp)
-set(INCLUDE ../include/Thread/HttpHandler.hpp)
-set(SRC ../sources/Thread/HttpHandler.cpp)
+set(TESTS_SOURCES TestSources/HttpHandlerTest.cpp TestSources/ServerConfigTest.cpp)
 
-add_executable(ZiaTests ${SRC} ${INCLUDE} ${TESTS_SOURCES})
+SETUP_TARGET_FOR_COVERAGE(ZiaTests_coverage ZiaTests html_zia_coverage)
+
+add_executable(ZiaTests ${SRC} ${SOURCES} ${INCLUDES} ${TESTS_SOURCES})
 
 target_link_libraries(ZiaTests gtest_main)

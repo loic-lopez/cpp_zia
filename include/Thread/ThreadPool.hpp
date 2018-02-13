@@ -7,30 +7,30 @@
 
 #include <memory>
 #include <vector>
-#include "HttpHandler.hpp"
+#include <api/net.h>
+#include <Static/ServerConfig.hpp>
+#include <queue>
+#include "Handler/HttpHandler.hpp"
 
 class ThreadPool
 {
 private:
-    static ThreadPool m_instance;
-    std::vector<HttpHandler *> threads;
-    std::mutex        lock;
-    bool            activeThreadRemover;
-    std::thread     threadRemover;
-
-    ThreadPool();
-    ~ThreadPool();
-    ThreadPool& operator= (const ThreadPool&){}
-    ThreadPool (const ThreadPool&) = default;
+    std::mutex 			lock_;
+    std::condition_variable	condVar_;
+    bool 				shutdown_;
+    std::queue<std::function <void ()>> jobs_;
+    std::vector<std::thread> 	threads_;
+    ServerCoreId   serverCoreId;
 
 public:
-    static ThreadPool& Instance();
-    void addThread();
-    void handleRemoveTerminatedThreads();
-    bool isEmptyThreadPool();
-    void shutdown();
+    explicit ThreadPool(int nbThreads);
+    ~ThreadPool();
+    ThreadPool& operator= (const ThreadPool&){}
+    ThreadPool (const ThreadPool&) { };
 
-    const std::vector<HttpHandler *> &getThreads() const;
+
+    void 				doJob(std::function <void ()> func);
+    void	            threadRun(void);
 
 };
 

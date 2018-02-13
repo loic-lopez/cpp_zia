@@ -7,25 +7,47 @@
 
 #include <Static/ServerConfig.hpp>
 #include <Thread/ThreadPool.hpp>
+#include <api/net.h>
+#include <memory>
+#include "ImplSocket.hpp"
 
-class ServerCore
+class ServerCore : public zia::api::Net
 {
 private:
-    static ServerCore m_instance;
-    ThreadPool  &threadPool;
-    std::mutex lock;
+    ThreadPool threadPool;
+    std::shared_ptr<zia::api::ImplSocket> serverSocket;
+    std::string documentRootPath;
 
-    ServerCore& operator= (const ServerCore&){}
-    ServerCore (const ServerCore&) = default;
+    int port;
+    std::string serverName;
+    ServerCoreId serverCoreId;
+    bool isRunning;
+    std::shared_ptr<std::thread> serverThread;
 
-    ServerCore();
-    ~ServerCore();
+    int max_sd;
+    fd_set readfds;
+    struct timeval timeout;
+
+    void reset_fds();
+
 
 public:
-    static ServerCore& Instance();
-    void run();
 
-    std::mutex &getLock();
+    ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zia::api::Net::Callback callback);
+
+    ~ServerCore();
+
+    bool config(const zia::api::Conf &conf) override;
+
+    bool run(Callback cb) override;
+
+    bool send(zia::api::ImplSocket *sock, const Raw &resp) override;
+
+    bool stop() override;
+
+    ThreadPool &getThreadPool();
+
+    ServerCoreId getServerCoreId() const;
 
 };
 
