@@ -12,7 +12,11 @@ ServerLauncher &ServerLauncher::Instance()
     return m_instance;
 }
 
+#ifdef _WIN32
 ServerLauncher::ServerLauncher()
+#else
+ServerLauncher::ServerLauncher() : SignalHandler()
+#endif
 {
 
 }
