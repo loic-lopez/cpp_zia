@@ -7,6 +7,7 @@
 #else
 
 #include <windows.h>
+#include <set>
 
 #endif //!_WIN32
 

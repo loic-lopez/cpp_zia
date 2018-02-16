@@ -5,8 +5,6 @@
 #include <experimental/filesystem>
 #include <Static/ServerConfig.hpp>
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "TemplateArgumentsIssues"
 namespace fs = std::experimental::filesystem;
 namespace Json = nlohmann;
 
@@ -129,5 +127,3 @@ inline void ServerConfig::LoadDefaultWebSiteConf()
         return confObject;
     }();
 }
-
-#pragma clang diagnostic pop

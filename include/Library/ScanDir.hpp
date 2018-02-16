@@ -5,14 +5,20 @@
 #ifndef CPP_ZIA_SCANDIR_HPP
 #define CPP_ZIA_SCANDIR_HPP
 
-#include <dirent.h>
+#ifdef WIN32
+#include "dirent.h"
+#include <cstdio>
+#include <cstdlib>
 
+#else
+#include <dirent.h>
 #include <algorithm>
 #include <exception>
 #include <memory>
 #include <vector>
 #include <utility>
 #include <system_error>
+#endif
 
 namespace scandirpp {
     typedef std::unique_ptr<struct dirent> EntryPtr;
@@ -27,7 +33,14 @@ namespace scandirpp {
 
     inline EntryPtrVector get_entry_ptrs(const std::string& dir) {
         struct dirent** ptrs;
+#ifdef WIN32
+        int n = scandir(dir.c_str(), &ptrs, nullptr, [] (const void *d1, const void *d2) -> int {
+            return(strcmp((*(struct dirent **)d1)->d_name,
+                          (*(struct dirent **)d2)->d_name));
+        });
+#else
         int n = scandir(dir.c_str(), &ptrs, nullptr, alphasort);
+#endif
         if (n < 0) {
             throw ScandirException(dir);
         }
@@ -46,7 +59,7 @@ namespace scandirpp {
     }
 
     inline ino_t extract_ino(const struct dirent& entry) {
-        return entry.d_ino;
+        return static_cast<ino_t>(entry.d_ino);
     }
 
     template<class OutputIterator,
@@ -100,8 +113,8 @@ namespace scandirpp {
 
     template<class ValueFilter = bool (*)(const std::string&), class EntryFilter = bool (*)(const struct dirent&)>
     inline std::vector<std::string> get_names(const std::string& dir,
-                                              ValueFilter&& value_filter = default_filter,
-                                              EntryFilter&& entry_filter = default_filter)
+                                              ValueFilter value_filter = default_filter,
+                                              EntryFilter entry_filter = default_filter)
     {
         return get_vector(dir, extract_name, std::forward<ValueFilter>(value_filter), std::forward<EntryFilter>(entry_filter));
     }

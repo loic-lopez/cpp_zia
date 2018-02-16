@@ -12,7 +12,11 @@ ServerLauncher &ServerLauncher::Instance()
     return m_instance;
 }
 
-ServerLauncher::ServerLauncher() : SignalHandler(SignalHandler::DEFAULT_SIGNALS)
+#ifdef _WIN32
+ServerLauncher::ServerLauncher()
+#else
+ServerLauncher::ServerLauncher() : SignalHandler()
+#endif
 {
 
 }
@@ -25,7 +29,7 @@ ServerLauncher::~ServerLauncher()
 
 void ServerLauncher::launch()
 {
-
+    std::cout << "SIG";
     for (const auto &conf : ServerConfig::WebSiteConfs)
     {
         zia::api::Net *server = new ServerCore(conf.first, conf.second, [&server](zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)
@@ -52,5 +56,5 @@ bool ServerLauncher::handleSignal(int signal)
         server.second->stop();
         servers.erase(server.first);
     }
+    return true;
 }
-
