@@ -8,10 +8,10 @@
 ** Last update Wed Jan 24 10:42:14 2018 Loic DUPIL
 */
 
+#include <sstream>
 #include "Parser/ReqParser.hpp"
 
-ReqParser::ReqParser()
-{
+ReqParser::ReqParser() {
     this->type.insert({"GET", zia::api::http::Method::get});
     this->type.insert({"OPTIONS", zia::api::http::Method::options});
     this->type.insert({"HEAD", zia::api::http::Method::head});
@@ -23,29 +23,24 @@ ReqParser::ReqParser()
     this->type.insert({"UNKNOWN", zia::api::http::Method::unknown});
 }
 
-ReqParser::~ReqParser()
-{
+ReqParser::~ReqParser() {
 
 }
 
-void ReqParser::parseHttpFormat(std::string httpRequest)
-{
-    std::stringstream   line(httpRequest);
-    std::string         segment;
+void ReqParser::parseHttpFormat(std::string httpRequest) {
+    std::stringstream line(httpRequest);
+    std::string segment;
 
     while (std::getline(line, segment, '\n'))
         this->dividedRequestLines.push_back(segment);
 
-    for (const auto &request : dividedRequestLines)
-    {
-        std::stringstream   line(request);
+    for (const auto &request : dividedRequestLines) {
+        std::stringstream line(request);
         while (std::getline(line, segment, ' '))
             this->dividedRequestWords.push_back(segment);
     }
-    for (const auto &version : dividedRequestWords)
-    {
-        if (version.find("HTTP/1.1") != std::string::npos)
-        {
+    for (const auto &version : dividedRequestWords) {
+        if (version.find("HTTP/1.1") != std::string::npos) {
             treatHttp1_1();
             break;
         }
@@ -57,8 +52,7 @@ void ReqParser::treatHttp1_1()
 {
     this->request.version = zia::api::http::Version::http_1_1;
     this->path = this->dividedRequestWords[1];
-    for (const auto &method : this->dividedRequestWords)
-    {
+    for (const auto &method : this->dividedRequestWords) {
         if (this->type.find(method) != this->type.end())
             this->request.method = this->type[method];
         if (method.at(method.size() - 1) == ':')
@@ -76,14 +70,12 @@ void ReqParser::treatHttp1_1()
 //        }
 //        i++;
 //    }
+    this->createResponse();
 }
 
-void ReqParser::fillHeaders(std::string toFind)
-{
-    for (const auto &headers : this->dividedRequestLines)
-    {
-        if (headers.find(toFind) != std::string::npos)
-        {
+void ReqParser::fillHeaders(std::string toFind) {
+    for (const auto &headers : this->dividedRequestLines) {
+        if (headers.find(toFind) != std::string::npos) {
             this->request.headers.insert({toFind, headers.substr(toFind.size() + 1)});
             if (toFind == "Host:")
                 this->request.uri = headers.substr(toFind.size() + 1);
@@ -91,7 +83,51 @@ void ReqParser::fillHeaders(std::string toFind)
     }
 }
 
-void ReqParser::getBody(size_t i)
-{
+void ReqParser::getBody(size_t i) {
 
 }
+
+void ReqParser::createResponse() {
+    if (this->path.length() > 0) {
+        if (this->request.version == zia::api::http::Version::http_1_1)
+            this->response.version = zia::api::http::Version::http_1_1;
+        std::string temp_path;
+        std::string final_path = "../tests_pages/";
+        temp_path = this->path.substr(this->path.find_last_of("/") + 1);
+        final_path += temp_path;
+        if (this->fileExists()) {
+            std::ifstream myFile(this->path);
+            if (myFile.good()) {
+                char c;
+                while (myFile.get(c)) {
+                    std::byte uc = static_cast<std::byte>(c);
+                    this->response.body.push_back(uc);
+                }
+                this->response.status = zia::api::http::common_status::ok;
+                this->response.reason = "OK";
+            } else {
+                this->response.status = zia::api::http::common_status::forbidden;
+                this->response.reason = "Forbidden";
+            }
+        } else {
+            this->response.status = zia::api::http::common_status::not_found;
+            this->response.reason = "Not found";
+        }
+    }
+    this->fillResponseHeader();
+    //TODO : Remplacer le "final_path" par le préfixe définitif et vérification des headers
+}
+
+void ReqParser::fillResponseHeader() {
+    this->response.headers.insert({"Server: ", "Zia"});
+    this->response.headers.insert({"Content-Length: ", std::to_string(this->response.body.size())});
+    this->response.headers.insert({"Content-Type: ", "text/html"});
+    this->response.headers.insert({"Connection: ", "close"});
+
+}
+
+bool ReqParser::fileExists() {
+    struct stat buffer;
+    return (stat(this->path.c_str(), &buffer) == 0);
+}
+

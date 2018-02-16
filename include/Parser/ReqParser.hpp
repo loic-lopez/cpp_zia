@@ -12,25 +12,33 @@
 
 #include <vector>
 #include <map>
-#include "IParser.hpp"
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <streambuf>
+#include <api/http.h>
 #include "Enum.hpp"
 
-class ReqParser : public IParser
+class ReqParser
 {
     std::vector<std::string>                        dividedRequestLines;
     std::vector<std::string>                        dividedRequestWords;
     zia::api::HttpRequest                           request;
     std::map<std::string, zia::api::http::Method>   type;
     std::string                                     path;
+    zia::api::HttpResponse                          response;
 
 public:
     ReqParser();
     ~ReqParser();
 
-    virtual void    parseHttpFormat(std::string);
-    virtual void    treatHttp1_1();
-    virtual void    fillHeaders(std::string);
-    virtual void    getBody(size_t);
+    void    parseHttpFormat(std::string);
+    void    treatHttp1_1();
+    void    fillHeaders(std::string);
+    void    getBody(size_t);
+    void    createResponse();
+    void    fillResponseHeader();
+    bool    fileExists();
 
 };
 

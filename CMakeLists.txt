@@ -27,7 +27,6 @@ set(SOURCES
         sources/Static/ServerConfig.cpp
         sources/Thread/ThreadPool.cpp
         sources/Parser/ReqParser.cpp
-        sources/Parser/AnsParser.cpp
         sources/Core/ServerCore.cpp sources/Core/ServerLauncher.cpp sources/Handler/SignalHandler.cpp)
 
 set(INCLUDE
@@ -43,7 +42,7 @@ set(INCLUDE
         include/Thread/ThreadPool.hpp
         include/Core/ImplSocket.hpp
         include/Core/ServerLauncher.hpp
-        include/Parser/ReqParser.hpp include/Parser/IParser.hpp include/Enum.hpp include/Parser/AnsParser.hpp
+        include/Parser/ReqParser.hpp include/Enum.hpp
 
         include/Library/ScanDir.hpp include/Handler/SignalHandler.hpp)
 
