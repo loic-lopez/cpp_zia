@@ -18,9 +18,10 @@ private:
     zia::api::Net::Raw rawData;
     zia::api::NetInfo netInfo;
     ServerCoreId serverCoreId;
+    std::string  documentRootPath;
 
 public:
-    explicit HttpHandler(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo, ServerCoreId serverCoreId);
+    explicit HttpHandler(zia::api::Net::Raw rawData, zia::api::NetInfo netInfo, const std::string &documentRootPath, ServerCoreId serverCoreId);
 
     virtual ~HttpHandler();
 

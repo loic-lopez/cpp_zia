@@ -26,10 +26,9 @@ set(SOURCES
         sources/Handler/HttpHandler.cpp
         sources/Static/ServerConfig.cpp
         sources/Thread/ThreadPool.cpp
+        sources/Parser/ReqParser.cpp
+        sources/Parser/AnsParser.cpp
         sources/Core/ServerCore.cpp sources/Core/ServerLauncher.cpp sources/Handler/SignalHandler.cpp)
-
-set(SOURCES sources/main.cpp
-        sources/Parser/ReqParser.cpp sources/Parser/AnsParser.cpp)
 
 set(INCLUDE
         include/Handler/HttpHandler.hpp
@@ -44,11 +43,9 @@ set(INCLUDE
         include/Thread/ThreadPool.hpp
         include/Core/ImplSocket.hpp
         include/Core/ServerLauncher.hpp
-        include/Library/ScanDir.hpp include/Handler/SignalHandler.hpp)
+        include/Parser/ReqParser.hpp include/Parser/IParser.hpp include/Enum.hpp include/Parser/AnsParser.hpp
 
-set(INCLUDE
-        include/Thread/HttpHandler.hpp
-        include/Parser/ReqParser.hpp include/Parser/IParser.hpp include/Enum.hpp include/Parser/AnsParser.hpp)
+        include/Library/ScanDir.hpp include/Handler/SignalHandler.hpp)
 
 include_directories(include)
 
@@ -64,7 +61,5 @@ add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
 add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/html $<TARGET_FILE_DIR:${TARGET_NAME}>/html)
-
-add_subdirectory(tests)
 
 

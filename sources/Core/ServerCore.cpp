@@ -157,3 +157,7 @@ void ServerCore::reset_fds()
     timeout.tv_usec = 100000;
     max_sd = serverSocket->socket;
 }
+
+const std::string &ServerCore::getDocumentRootPath() const {
+    return documentRootPath;
+}

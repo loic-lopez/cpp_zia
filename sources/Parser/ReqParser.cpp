@@ -52,6 +52,7 @@ void ReqParser::parseHttpFormat(std::string httpRequest)
     }
 }
 
+// a transformer en zia::api::HttpRequest
 void ReqParser::treatHttp1_1()
 {
     this->request.version = zia::api::http::Version::http_1_1;

@@ -20,6 +20,10 @@ private:
     ThreadPool threadPool;
     std::shared_ptr<zia::api::ImplSocket> serverSocket;
     std::string documentRootPath;
+public:
+    const std::string &getDocumentRootPath() const;
+
+private:
 
     int port;
     std::string serverName;
