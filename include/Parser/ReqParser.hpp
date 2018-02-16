@@ -17,11 +17,11 @@
 
 class ReqParser : public IParser
 {
-    std::vector<std::string>    dividedRequestLines;
-    std::vector<std::string>    dividedRequestWords;
-    zia::api::HttpRequest       request;
+    std::vector<std::string>                        dividedRequestLines;
+    std::vector<std::string>                        dividedRequestWords;
+    zia::api::HttpRequest                           request;
     std::map<std::string, zia::api::http::Method>   type;
-    std::string                 path;
+    std::string                                     path;
 
 public:
     ReqParser();
