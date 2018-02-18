@@ -29,13 +29,12 @@ ServerLauncher::~ServerLauncher()
 
 void ServerLauncher::launch()
 {
-    std::cout << "SIG";
     for (const auto &conf : ServerConfig::WebSiteConfs)
     {
         zia::api::Net *server = new ServerCore(conf.first, conf.second, [&server](zia::api::Net::Raw rawData, zia::api::NetInfo netInfo)
         {
             auto serverCore = reinterpret_cast<ServerCore *>(server);
-            HttpHandler httpHandler = HttpHandler(rawData, netInfo, serverCore->getDocumentRootPath(), serverCore->getServerCoreId());
+            HttpHandler httpHandler = HttpHandler(std::move(rawData), std::move(netInfo), serverCore->getDocumentRootPath(), serverCore->getServerCoreId());
             serverCore->getThreadPool().doJob(std::bind(&HttpHandler::run, httpHandler));
         });
         this->servers[conf.first] = std::shared_ptr<zia::api::Net>(server);

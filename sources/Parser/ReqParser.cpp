@@ -9,6 +9,7 @@
 */
 
 #include <sstream>
+#include <sys/stat.h>
 #include "Parser/ReqParser.hpp"
 
 ReqParser::ReqParser() {
