@@ -28,11 +28,11 @@ ReqParser::~ReqParser() {
 
 }
 
-void ReqParser::parseHttpFormat(std::string httpRequest) {
+zia::api::HttpResponse  ReqParser::parseHttpFormat(std::string httpRequest) {
     std::stringstream line(httpRequest);
     std::string segment;
 
-    while (std::getline(line, segment, '\n'))
+   while (std::getline(line, segment, '\n'))
         this->dividedRequestLines.push_back(segment);
 
     for (const auto &request : dividedRequestLines) {
@@ -46,6 +46,7 @@ void ReqParser::parseHttpFormat(std::string httpRequest) {
             break;
         }
     }
+    return (response);
 }
 
 // a transformer en zia::api::HttpRequest
@@ -56,9 +57,13 @@ void ReqParser::treatHttp1_1()
     for (const auto &method : this->dividedRequestWords) {
         if (this->type.find(method) != this->type.end())
             this->request.method = this->type[method];
-        if (method.at(method.size() - 1) == ':')
+        if (method.at(method.size() - 1) == ':') {
+
             fillHeaders(method);
+        }
+
     }
+
     //TODO: a finir récupération du body
 //    size_t i = 0;
 //    for (std::vector<std::string>::iterator it = this->dividedRequestLines.begin(); it < this->dividedRequestLines.end() ; ++it)
@@ -89,13 +94,16 @@ void ReqParser::getBody(size_t i) {
 }
 
 void ReqParser::createResponse() {
-    if (this->path.length() > 0) {
+    if (this->path.size() > 0) {
+        if (path == "/")
+            path = "/index.html";
         if (this->request.version == zia::api::http::Version::http_1_1)
             this->response.version = zia::api::http::Version::http_1_1;
         std::string temp_path;
-        std::string final_path = "../tests_pages/";
+        std::string final_path = "../html/";
         temp_path = this->path.substr(this->path.find_last_of("/") + 1);
         final_path += temp_path;
+        path = final_path;
         if (this->fileExists()) {
             std::ifstream myFile(this->path);
             if (myFile.good()) {

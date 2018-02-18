@@ -114,22 +114,8 @@ bool ServerCore::run(zia::api::Net::Callback callback)
 
 bool ServerCore::send(zia::api::ImplSocket *sock, const zia::api::Net::Raw &resp)
 {
-
-    std::ifstream ifs("html/index.html");
-    std::string content((std::istreambuf_iterator<char>(ifs)),
-                        (std::istreambuf_iterator<char>()));
-
-    ifs.close();
-    std::time_t t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    std::string header =
-            std::string("HTTP/1.1 200 OK\r\n") +
-            std::string("Server: Zia\r\n") +
-            std::string("Content-Length: ") + std::to_string(content.size()) + "\r\n" +
-            std::string("Content-Type: text/html\r\n") +
-            std::string("Connection: close\r\n") + "\r\n" + content;
-
-
-    ::send(sock->socket, header.c_str(), header.size(), 0);
+    std::string response(reinterpret_cast<const char *>(resp.data()));
+    ::send(sock->socket, response.c_str(), response.size(), 0);
     return true;
 }
 

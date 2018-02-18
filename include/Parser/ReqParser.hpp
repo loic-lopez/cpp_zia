@@ -32,7 +32,7 @@ public:
     ReqParser();
     ~ReqParser();
 
-    void    parseHttpFormat(std::string);
+    zia::api::HttpResponse     parseHttpFormat(std::string);
     void    treatHttp1_1();
     void    fillHeaders(std::string);
     void    getBody(size_t);
