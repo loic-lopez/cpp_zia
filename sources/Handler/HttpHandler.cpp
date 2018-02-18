@@ -18,7 +18,7 @@ void HttpHandler::run()
 {
 if (!rawData.empty()) {
     std::string fullReq(reinterpret_cast<char *>(rawData.data()));
-    ReqParser clientQuest;
+    ReqParser clientQuest(documentRootPath);
     zia::api::HttpResponse resp = clientQuest.parseHttpFormat(fullReq);
     std::string header;
     zia::api::Net::Raw respRaw;

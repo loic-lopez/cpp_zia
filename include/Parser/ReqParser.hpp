@@ -26,10 +26,11 @@ class ReqParser
     zia::api::HttpRequest                           request;
     std::map<std::string, zia::api::http::Method>   type;
     std::string                                     path;
+    std::string                                     rootfolder;
     zia::api::HttpResponse                          response;
 
 public:
-    ReqParser();
+    ReqParser(std::string _rootfolder);
     ~ReqParser();
 
     zia::api::HttpResponse     parseHttpFormat(std::string);

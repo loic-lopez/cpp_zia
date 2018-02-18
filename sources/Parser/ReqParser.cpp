@@ -12,7 +12,8 @@
 #include <sys/stat.h>
 #include "Parser/ReqParser.hpp"
 
-ReqParser::ReqParser() {
+ReqParser::ReqParser(std::string _rootfolder) {
+    rootfolder = _rootfolder;
     this->type.insert({"GET", zia::api::http::Method::get});
     this->type.insert({"OPTIONS", zia::api::http::Method::options});
     this->type.insert({"HEAD", zia::api::http::Method::head});
@@ -100,7 +101,7 @@ void ReqParser::createResponse() {
         if (this->request.version == zia::api::http::Version::http_1_1)
             this->response.version = zia::api::http::Version::http_1_1;
         std::string temp_path;
-        std::string final_path = "../html/";
+        std::string final_path = rootfolder;
         temp_path = this->path.substr(this->path.find_last_of("/") + 1);
         final_path += temp_path;
         path = final_path;
