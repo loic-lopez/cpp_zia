@@ -29,11 +29,11 @@ ReqParser::~ReqParser() {
 
 }
 
-zia::api::HttpResponse ReqParser::parseHttpFormat(std::string httpRequest) {
+zia::api::HttpResponse  ReqParser::parseHttpFormat(std::string httpRequest) {
     std::stringstream line(httpRequest);
     std::string segment;
 
-    while (std::getline(line, segment, '\n'))
+   while (std::getline(line, segment, '\n'))
         this->dividedRequestLines.push_back(segment);
 
     for (const auto &request : dividedRequestLines) {
@@ -50,11 +50,8 @@ zia::api::HttpResponse ReqParser::parseHttpFormat(std::string httpRequest) {
     return (response);
 }
 
-// a transformer en zia::api::HttpRequest
-void ReqParser::treatHttp1_1() {
-    std::string potentialError = "";
-    std::string errorReason = "";
-
+void ReqParser::treatHttp1_1()
+{
     this->request.version = zia::api::http::Version::http_1_1;
     this->path = this->dividedRequestWords[1];
     for (const auto &method : this->dividedRequestWords) {
@@ -67,19 +64,7 @@ void ReqParser::treatHttp1_1() {
 
     }
 
-    //TODO: a finir récupération du body
-//    size_t i = 0;
-//    for (std::vector<std::string>::iterator it = this->dividedRequestLines.begin(); it < this->dividedRequestLines.end() ; ++it)
-//    {
-//        if ((*it) == "\n")
-//        {
-//            getBody(i);
-//            i++;
-//            break;
-//        }
-//        i++;
-//    }
-    this->createResponse(potentialError, errorReason);
+    this->createResponse();
 }
 
 void ReqParser::fillHeaders(std::string toFind) {
@@ -96,7 +81,7 @@ void ReqParser::getBody(size_t i) {
 
 }
 
-void ReqParser::createResponse(std::string potentialError, std::string errorReason) {
+void ReqParser::createResponse(std::string potentialError = "", std::string errorReason = "") {
     if (std::stoi(potentialError) == 400) {
         this->response.status = zia::api::http::common_status::bad_request;
         this->response.reason = "Bad request";
