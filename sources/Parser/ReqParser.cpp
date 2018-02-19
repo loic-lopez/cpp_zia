@@ -97,15 +97,17 @@ void ReqParser::getBody(size_t i) {
 }
 
 void ReqParser::createResponse(std::string potentialError, std::string errorReason) {
-//    if (std::stoi(potentialError) == 400) {
-//        this->response.status = zia::api::http::common_status::bad_request;
-//        this->response.reason = "Bad request";
-//        for (unsigned int i = 0; i < errorReason.length(); i++) {
-//            char c = errorReason[i];
-//            std::byte uc = static_cast<std::byte>(c);
-//            this->response.body.push_back(uc);
-//        }
-//    }
+    if (potentialError.length() > 0 && errorReason.length() > 0) {
+        if (std::stoi(potentialError) == 400) {
+            this->response.status = zia::api::http::common_status::bad_request;
+            this->response.reason = "Bad request";
+            for (unsigned int i = 0; i < errorReason.length(); i++) {
+                char c = errorReason[i];
+                std::byte uc = static_cast<std::byte>(c);
+                this->response.body.push_back(uc);
+            }
+        }
+    }
     if (this->path.size() > 0) {
         if (path == "/")
             path = "/index.html";
