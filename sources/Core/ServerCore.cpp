@@ -7,6 +7,7 @@
 #include <Core/ServerCore.hpp>
 #include <fcntl.h>
 #include <api/http.h>
+#include <Exception/ZiaException.hpp>
 
 
 ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zia::api::Net::Callback callback)
@@ -21,8 +22,14 @@ ServerCore::ServerCore(ServerCoreId serverCoreId, const zia::api::Conf &conf, zi
     this->serverCoreId = serverCoreId;
     serverSocket = std::make_shared<zia::api::ImplSocket>();
     serverSocket->socket = socket(AF_INET, SOCK_STREAM, 0);
-    if (serverSocket->socket == INVALID_SOCKET)
-        throw std::runtime_error("Cannot create socket.");
+    try {
+        if (serverSocket->socket == INVALID_SOCKET)
+            throw ZiaException(ZiaException::errors::CREATE_SOCKET);
+    } catch (ZiaException const& e) {
+        std::cerr <<  e.what() << std::endl;
+        exit(84);
+    }
+
 
     int opt = 1;
     setsockopt(serverSocket->socket, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<const char *>(&opt), sizeof(int));
@@ -39,7 +46,13 @@ ServerCore::~ServerCore()
 {
     if (serverThread->joinable())
         serverThread->join();
-    closesocket(serverSocket->socket);
+    try {
+        closesocket(serverSocket->socket);
+    } catch (ZiaException const& e) {
+        std::cerr <<  "Unable to close Socket" << std::endl;
+         exit(84);
+    }
+
 #if defined (WIN32)
     WSACleanup();
 #endif
