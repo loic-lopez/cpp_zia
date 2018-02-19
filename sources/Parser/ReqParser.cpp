@@ -52,6 +52,9 @@ zia::api::HttpResponse ReqParser::parseHttpFormat(std::string httpRequest) {
 
 // a transformer en zia::api::HttpRequest
 void ReqParser::treatHttp1_1() {
+    std::string potentialError = "";
+    std::string errorReason = "";
+
     this->request.version = zia::api::http::Version::http_1_1;
     this->path = this->dividedRequestWords[1];
     for (const auto &method : this->dividedRequestWords) {
@@ -76,7 +79,7 @@ void ReqParser::treatHttp1_1() {
 //        }
 //        i++;
 //    }
-    this->createResponse();
+    this->createResponse(potentialError, errorReason);
 }
 
 void ReqParser::fillHeaders(std::string toFind) {
@@ -93,7 +96,7 @@ void ReqParser::getBody(size_t i) {
 
 }
 
-void ReqParser::createResponse(std::string potentialError = "", std::string errorReason = "") {
+void ReqParser::createResponse(std::string potentialError, std::string errorReason) {
     if (std::stoi(potentialError) == 400) {
         this->response.status = zia::api::http::common_status::bad_request;
         this->response.reason = "Bad request";
