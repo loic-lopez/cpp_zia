@@ -27,7 +27,9 @@ set(SOURCES
         sources/Static/ServerConfig.cpp
         sources/Thread/ThreadPool.cpp
         sources/Parser/ReqParser.cpp
-        sources/Core/ServerCore.cpp sources/Core/ServerLauncher.cpp sources/Handler/SignalHandler.cpp)
+        sources/Core/ServerCore.cpp
+        sources/Core/ServerLauncher.cpp
+        sources/Handler/SignalHandler.cpp)
 
 set(INCLUDE
         include/Handler/HttpHandler.hpp
@@ -42,9 +44,12 @@ set(INCLUDE
         include/Thread/ThreadPool.hpp
         include/Core/ImplSocket.hpp
         include/Core/ServerLauncher.hpp
-        include/Parser/ReqParser.hpp include/Enum.hpp
-
-        include/Library/ScanDir.hpp include/Handler/SignalHandler.hpp)
+        include/Parser/ReqParser.hpp
+        include/Enum.hpp
+        include/Library/ScanDir.hpp
+        include/Handler/SignalHandler.hpp
+        include/Exception/ZiaException.hpp
+        include/Exception/ZiaException.hpp)
 
 include_directories(include)
 

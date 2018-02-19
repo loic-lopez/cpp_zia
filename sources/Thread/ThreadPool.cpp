@@ -5,13 +5,21 @@
 #include <Thread/ThreadPool.hpp>
 #include <iostream>
 #include <Core/ServerCore.hpp>
+#include <Exception/ZiaException.hpp>
 
 ThreadPool::ThreadPool(int threads) : shutdown_(false)
 {
     this->threads_.reserve(threads);
 
-    for (int i = 0; i < threads; i++)
-        this->threads_.emplace_back(std::bind(&ThreadPool::threadRun, this));
+    for (int i = 0; i < threads; i++) {
+        try {
+            this->threads_.emplace_back(std::bind(&ThreadPool::threadRun, this));
+        } catch (ZiaException const& e) {
+            std::cerr <<  e.what() << std::endl;
+            exit(84);
+        }
+    }
+
 }
 
 ThreadPool::~ThreadPool()
