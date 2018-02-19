@@ -37,7 +37,7 @@ public:
     void    treatHttp1_1();
     void    fillHeaders(std::string);
     void    getBody(size_t);
-    void    createResponse();
+    void    createResponse(std::string potentialError = "", std::string errorReason = "");
     void    fillResponseHeader();
     bool    fileExists();
 

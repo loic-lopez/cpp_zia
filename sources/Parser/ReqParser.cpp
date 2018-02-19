@@ -94,7 +94,7 @@ void ReqParser::getBody(size_t i) {
 
 }
 
-void ReqParser::createResponse() {
+void ReqParser::createResponse(std::string potentialError = "", std::string errorReason = "") {
     if (this->path.size() > 0) {
         if (path == "/")
             path = "/index.html";
@@ -125,7 +125,6 @@ void ReqParser::createResponse() {
         }
     }
     this->fillResponseHeader();
-    //TODO : Remplacer le "final_path" par le préfixe définitif et vérification des headers
 }
 
 void ReqParser::fillResponseHeader() {
