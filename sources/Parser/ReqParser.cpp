@@ -32,6 +32,7 @@ ReqParser::~ReqParser() {
 zia::api::HttpResponse ReqParser::parseHttpFormat(std::string httpRequest) {
     std::stringstream line(httpRequest);
     std::string segment;
+    std::regex  format { "([A-Z]+) (.+) (HTTP\/1\.1)" };
 
     while (std::getline(line, segment, '\n'))
         this->dividedRequestLines.push_back(segment);
@@ -41,12 +42,21 @@ zia::api::HttpResponse ReqParser::parseHttpFormat(std::string httpRequest) {
         while (std::getline(line, segment, ' '))
             this->dividedRequestWords.push_back(segment);
     }
-    for (const auto &version : dividedRequestWords) {
-        if (version.find("HTTP/1.1") != std::string::npos) {
+//    for (const auto &version : dividedRequestWords) {
+//        if (version.find("HTTP/1.1") != std::string::npos) {
+//            treatHttp1_1();
+//            break;
+//        }
+//    }
+    if (std::regex_match(dividedRequestLines[0], format))
+    {
+        if (dividedRequestWords[2] == "HTTP/1.1")
             treatHttp1_1();
-            break;
-        }
+        else
+            createResponse("400", "Wrong HTTP version");
     }
+    else
+        createResponse("400", "");
     return (response);
 }
 
@@ -60,25 +70,13 @@ void ReqParser::treatHttp1_1() {
     for (const auto &method : this->dividedRequestWords) {
         if (this->type.find(method) != this->type.end())
             this->request.method = this->type[method];
+        else
+            createResponse("400", "Unknown method: " + method);
         if (method.at(method.size() - 1) == ':') {
-
             fillHeaders(method);
         }
 
     }
-
-    //TODO: a finir récupération du body
-//    size_t i = 0;
-//    for (std::vector<std::string>::iterator it = this->dividedRequestLines.begin(); it < this->dividedRequestLines.end() ; ++it)
-//    {
-//        if ((*it) == "\n")
-//        {
-//            getBody(i);
-//            i++;
-//            break;
-//        }
-//        i++;
-//    }
     this->createResponse(potentialError, errorReason);
 }
 

@@ -10,6 +10,7 @@
 #include <api/net.h>
 #include <Static/ServerConfig.hpp>
 #include <queue>
+#include <condition_variable>
 #include "Handler/HttpHandler.hpp"
 
 class ThreadPool

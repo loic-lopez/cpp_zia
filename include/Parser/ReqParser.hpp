@@ -17,6 +17,7 @@
 #include <iterator>
 #include <streambuf>
 #include <api/http.h>
+#include <regex>
 #include "Enum.hpp"
 
 class ReqParser
