@@ -32,11 +32,10 @@ ReqParser::~ReqParser() {
 zia::api::HttpResponse ReqParser::parseHttpFormat(std::string httpRequest) {
     std::stringstream line(httpRequest);
     std::string segment;
-    std::regex  format { "([A-Z]+) (.+) (HTTP\\/1\\.1)" };
+    std::regex  format { "([A-Z]+) (.+) (HTTP/1.1)" };
 
     while (std::getline(line, segment, '\n'))
         this->dividedRequestLines.push_back(segment);
-
     for (const auto &request : dividedRequestLines) {
         std::stringstream line(request);
         while (std::getline(line, segment, ' '))
@@ -48,15 +47,15 @@ zia::api::HttpResponse ReqParser::parseHttpFormat(std::string httpRequest) {
 //            break;
 //        }
 //    }
-    if (std::regex_match(dividedRequestLines[0], format))
-    {
-        if (dividedRequestWords[2] == "HTTP/1.1")
-            treatHttp1_1();
-        else
+//  if (std::regex_match(dividedRequestLines[0], format))
+ //     {
+        if (dividedRequestWords[2].substr(0, 8) == "HTTP/1.1")
+           treatHttp1_1();
+         else
             createResponse("400", "Wrong HTTP version");
-    }
-    else
-        createResponse("400", "");
+ //  }
+ //   else
+  //    createResponse("400", "");
     return (response);
 }
 
@@ -68,10 +67,7 @@ void ReqParser::treatHttp1_1() {
     this->request.version = zia::api::http::Version::http_1_1;
     this->path = this->dividedRequestWords[1];
     for (const auto &method : this->dividedRequestWords) {
-        if (this->type.find(method) != this->type.end())
             this->request.method = this->type[method];
-        else
-            createResponse("400", "Unknown method: " + method);
         if (method.at(method.size() - 1) == ':') {
             fillHeaders(method);
         }
@@ -97,6 +93,7 @@ void ReqParser::getBody(size_t i) {
 void ReqParser::createResponse(std::string potentialError, std::string errorReason) {
     if (potentialError.length() > 0 && errorReason.length() > 0) {
         if (std::stoi(potentialError) == 400) {
+
             this->response.status = zia::api::http::common_status::bad_request;
             this->response.reason = "Bad request";
             for (unsigned int i = 0; i < errorReason.length(); i++) {

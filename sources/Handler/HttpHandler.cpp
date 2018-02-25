@@ -53,6 +53,16 @@ if (!rawData.empty()) {
         header += notFound;
         for (size_t i = 0; i < header.size(); i++)
             respRaw.push_back((std::byte) header[i]);
+    } else {
+        std::string notFound("<html><body><h1>Error 400</h1>Bad request</body></html>");
+        header += std::string("HTTP/1.1 200 OK\r\n");
+        header += "Server: " + resp.headers["Server: "] + "\r\n";
+        header += "Content-Length: " + std::to_string(notFound.size()) + "\r\n";
+        header += std::string("Content-Type: text/html\r\n");
+        header += std::string("Connection: close\r\n") + "\r\n";
+        header += notFound;
+        for (size_t i = 0; i < header.size(); i++)
+            respRaw.push_back((std::byte) header[i]);
     }
     ServerLauncher::Instance().getServer(serverCoreId)->send(netInfo.sock, respRaw);
     std::cerr << "RESPONSE SENT!" << std::endl;
