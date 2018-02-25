@@ -32,7 +32,7 @@ ReqParser::~ReqParser() {
 zia::api::HttpResponse ReqParser::parseHttpFormat(std::string httpRequest) {
     std::stringstream line(httpRequest);
     std::string segment;
-    std::regex  format { "([A-Z]+) (.+) (HTTP\/1\.1)" };
+    std::regex  format { "([A-Z]+) (.+) (HTTP\\/1\\.1)" };
 
     while (std::getline(line, segment, '\n'))
         this->dividedRequestLines.push_back(segment);
